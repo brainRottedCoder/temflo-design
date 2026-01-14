@@ -107,16 +107,19 @@ export default function Overview() {
                                 title="Discharge Stations"
                                 value="08"
                                 isActive={activeMetric === 'discharge'}
+                                onClick={() => setActiveTab('discharge')}
                             />
                             <MetricCard
                                 title="Automatic Weather Stations"
                                 value="03"
                                 isActive={activeMetric === 'weather'}
+                                onClick={() => setActiveTab('weather')}
                             />
                             <MetricCard
                                 title="Rain Gauge Stations"
                                 value="09"
                                 isActive={activeMetric === 'rain-gauge'}
+                                onClick={() => setActiveTab('rain-gauge')}
                             />
                             <MetricCard title="Juddo Pond Level" value="02" />
                             <MetricCard title="Juddo Forebay Level" value="02" />

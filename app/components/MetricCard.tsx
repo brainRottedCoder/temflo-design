@@ -3,17 +3,25 @@ interface MetricCardProps {
   value: string;
   isPrimary?: boolean;
   isActive?: boolean;
+  onClick?: () => void;
 }
 
-export default function MetricCard({ title, value, isPrimary = false, isActive = false }: MetricCardProps) {
+export default function MetricCard({
+  title,
+  value,
+  isPrimary = false,
+  isActive = false,
+  onClick
+}: MetricCardProps) {
   const showActiveStyle = isPrimary || isActive;
 
   return (
     <div
-      className="rounded-[16px] px-4 py-3 min-h-[90px]"
+      className={`rounded-[16px] px-4 py-3 min-h-[90px] transition-all ${onClick ? 'cursor-pointer hover:scale-[1.02] hover:shadow-lg' : ''}`}
       style={{
         backgroundColor: showActiveStyle ? 'rgba(37, 34, 227, 0.70)' : 'rgba(54, 159, 255, 0.10)',
       }}
+      onClick={onClick}
     >
       <div
         className="text-sm font-medium mb-2 leading-tight"
