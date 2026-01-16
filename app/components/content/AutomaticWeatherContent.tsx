@@ -3,10 +3,10 @@ import WeatherStationCard from '../WeatherStationCard';
 export default function AutomaticWeatherContent() {
     return (
         <div className="flex flex-col min-h-0">
-            <h2 className="text-xl font-bold mb-3" style={{ color: '#303030' }}>
+            <h2 className="text-2xl font-bold mb-2" style={{ color: '#303030' }}>
                 Automatic Weather Stations
             </h2>
-            <div className="flex flex-col gap-2 flex-1 justify-between">
+            <div className="flex flex-col gap-1.5 flex-1 justify-between">
                 <WeatherStationCard
                     title="Syana Chatti Yamuna River"
                     windSpeed="03"

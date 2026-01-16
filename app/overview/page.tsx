@@ -82,10 +82,10 @@ export default function Overview() {
 
         return (
             <div className="flex flex-col min-h-0 h-full">
-                <h2 className="text-xl font-bold mb-3" style={{ color: '#303030' }}>
+                <h2 className="text-2xl font-bold mb-2" style={{ color: '#303030' }}>
                     Statistics
                 </h2>
-                <div className="grid grid-rows-3 gap-2 flex-1">
+                <div className="grid grid-rows-3 gap-2 flex-1 overflow-hidden">
                     <StatisticsChart title="Discharge" data={dischargeData} maxValue={600} />
                     <StatisticsChart title="Velocity" data={velocityData} maxValue={600} />
                     <StatisticsChart title="Water Level" data={waterLevelData} maxValue={600} />
@@ -98,11 +98,11 @@ export default function Overview() {
         <div className="h-screen flex flex-col" style={{ backgroundColor: '#f5f5f5' }}>
             <Header activeTab={activeTab} onTabChange={setActiveTab} />
 
-            <main className="flex-1 px-6 py-4 overflow-hidden">
-                <div className="h-full flex flex-col gap-4">
+            <main className="flex-1 px-4 py-2 overflow-hidden">
+                <div className="h-full flex flex-col gap-2">
                     {/* Metrics Row */}
-                    <div className="flex gap-3">
-                        <div className="flex-1 grid grid-cols-5 gap-3">
+                    <div className="flex gap-2">
+                        <div className="flex-1 grid grid-cols-5 gap-2">
                             <MetricCard
                                 title="Discharge Stations"
                                 value="08"
@@ -126,25 +126,25 @@ export default function Overview() {
                         </div>
 
                         <div
-                            className="rounded-xl px-4 py-3 min-w-[180px]"
+                            className="rounded-xl px-3 py-2 min-w-[160px]"
                             style={{ backgroundColor: '#f7f7f7' }}
                         >
-                            <div className="text-sm font-semibold mb-2" style={{ color: '#369fff' }}>
+                            <div className="text-base font-semibold mb-1" style={{ color: '#369fff' }}>
                                 Last Updated
                             </div>
                             <div className="flex items-start gap-2">
                                 <Image
                                     src="/icons/calendar.svg"
                                     alt="Calendar"
-                                    width={20}
-                                    height={20}
+                                    width={18}
+                                    height={18}
                                     className="mt-0.5"
                                 />
                                 <div>
-                                    <div className="text-sm font-semibold" style={{ color: '#369fff' }}>
+                                    <div className="text-base font-semibold" style={{ color: '#369fff' }}>
                                         10 January 2026
                                     </div>
-                                    <div className="text-sm font-semibold" style={{ color: '#369fff' }}>
+                                    <div className="text-base font-semibold" style={{ color: '#369fff' }}>
                                         10:00 AM
                                     </div>
                                 </div>
@@ -153,7 +153,7 @@ export default function Overview() {
                     </div>
 
                     {/* Main Content Grid */}
-                    <div className="flex-1 grid grid-cols-[1fr_1px_1.1fr] gap-5 overflow-hidden min-h-0">
+                    <div className="flex-1 grid grid-cols-[1fr_1px_1.1fr] gap-3 overflow-hidden min-h-0">
                         {/* Dynamic Content Area */}
                         {renderContent()}
 

@@ -61,10 +61,10 @@ const weatherStatsData = {
 export default function WeatherStatistics() {
     return (
         <div className="flex flex-col min-h-0">
-            <h2 className="text-xl font-bold mb-3" style={{ color: '#303030' }}>
+            <h2 className="text-2xl font-bold mb-2" style={{ color: '#303030' }}>
                 Statistics
             </h2>
-            <div className="grid grid-cols-3 grid-rows-3 gap-3 flex-1">
+            <div className="grid grid-cols-3 grid-rows-3 gap-2 flex-1">
                 {rivers.map((river) => (
                     <>
                         <CompactChart

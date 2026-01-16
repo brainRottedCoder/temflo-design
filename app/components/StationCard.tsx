@@ -8,20 +8,20 @@ interface StationCardProps {
 
 const colorConfig = {
   blue: {
-    bg: '#3b82f6',
-    shadow: '0 6px 16px rgba(59,130,246,0.3)',
+    bg: 'linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%)',
+    solid: '#3B82F6',
   },
   green: {
-    bg: '#8ac53e',
-    shadow: '0 6px 16px rgba(138,197,62,0.3)',
+    bg: 'linear-gradient(135deg, #A3E635 0%, #84CC16 100%)',
+    solid: '#84CC16',
   },
   orange: {
-    bg: '#ff993a',
-    shadow: '0 6px 16px rgba(255,153,58,0.3)',
+    bg: 'linear-gradient(135deg, #FB923C 0%, #F97316 100%)',
+    solid: '#F97316',
   },
   yellow: {
-    bg: '#ffd143',
-    shadow: '0 6px 16px rgba(255,209,67,0.3)',
+    bg: 'linear-gradient(135deg, #FDE047 0%, #FACC15 100%)',
+    solid: '#FACC15',
   },
 };
 
@@ -36,28 +36,37 @@ export default function StationCard({
 
   return (
     <div
-      className="rounded-[12px] px-3 py-2 text-white h-full flex flex-col"
-      style={{ backgroundColor: config.bg, boxShadow: config.shadow }}
+      className="rounded-2xl px-3 py-2 text-white h-full flex flex-col overflow-hidden"
+      style={{
+        background: config.bg,
+        boxShadow: `0 4px 12px ${config.solid}30`,
+        minHeight: 0,
+      }}
     >
-      <h3 className="text-sm font-bold mb-1.5 leading-tight">{title}</h3>
-      <div className="grid grid-cols-3 gap-1 text-center">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-semibold opacity-95">Discharge</span>
-          <span className="text-[9px] font-medium opacity-80">(m3/s)</span>
+      {/* Title */}
+      <h3 className="text-base font-bold leading-tight mb-1">{title}</h3>
+
+      {/* Labels Row */}
+      <div className="grid grid-cols-3 gap-1 text-center flex-1">
+        <div className="flex flex-col justify-center">
+          <span className="text-md font-semibold opacity-95">Discharge</span>
+          <span className="text-xs font-medium opacity-80">(m3/s)</span>
         </div>
-        <div className="flex flex-col">
-          <span className="text-[10px] font-semibold opacity-95">Velocity</span>
-          <span className="text-[9px] font-medium opacity-80">(m/s)</span>
+        <div className="flex flex-col justify-center">
+          <span className="text-md font-semibold opacity-95">Velocity</span>
+          <span className="text-xs font-medium opacity-80">(m/s)</span>
         </div>
-        <div className="flex flex-col">
-          <span className="text-[10px] font-semibold opacity-95">Water Level</span>
-          <span className="text-[9px] font-medium opacity-80">(m)</span>
+        <div className="flex flex-col justify-center">
+          <span className="text-md font-semibold opacity-95">Water Level</span>
+          <span className="text-xs font-medium opacity-80">(m)</span>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-1 text-center mt-1">
-        <div className="text-xl font-bold leading-none">{discharge}</div>
-        <div className="text-xl font-bold leading-none">{velocity}</div>
-        <div className="text-xl font-bold leading-none">{waterLevel}</div>
+
+      {/* Values Row */}
+      <div className="grid grid-cols-3 gap-1 text-center mt-auto">
+        <div className="text-2xl font-bold leading-none">{discharge}</div>
+        <div className="text-2xl font-bold leading-none">{velocity}</div>
+        <div className="text-2xl font-bold leading-none">{waterLevel}</div>
       </div>
     </div>
   );

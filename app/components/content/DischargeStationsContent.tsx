@@ -14,11 +14,11 @@ const stationData: Array<{ color: 'blue' | 'green' | 'orange' | 'yellow' }> = [
 
 export default function DischargeStationsContent() {
     return (
-        <div className="flex flex-col min-h-0">
-            <h2 className="text-xl font-bold mb-3" style={{ color: '#303030' }}>
+        <div className="flex flex-col min-h-0 h-full overflow-hidden">
+            <h2 className="text-xl font-bold mb-1.5 flex-shrink-0" style={{ color: '#303030' }}>
                 Discharge Stations
             </h2>
-            <div className="grid grid-cols-2 grid-rows-4 gap-2 flex-1">
+            <div className="grid grid-cols-2 grid-rows-4 gap-1 flex-1 min-h-0 overflow-hidden">
                 {stationData.map((station, index) => (
                     <StationCard
                         key={index}
