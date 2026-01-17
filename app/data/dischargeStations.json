@@ -1,0 +1,69 @@
+{
+    "sectionTitle": "Discharge Stations",
+    "stations": [
+        {
+            "id": "ds-001",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "blue"
+        },
+        {
+            "id": "ds-002",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "orange"
+        },
+        {
+            "id": "ds-003",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "green"
+        },
+        {
+            "id": "ds-004",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "orange"
+        },
+        {
+            "id": "ds-005",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "blue"
+        },
+        {
+            "id": "ds-006",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "yellow"
+        },
+        {
+            "id": "ds-007",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "green"
+        },
+        {
+            "id": "ds-008",
+            "title": "Syana Chatti Yamuna River",
+            "discharge": "03",
+            "velocity": "03",
+            "waterLevel": "03",
+            "color": "yellow"
+        }
+    ]
+}

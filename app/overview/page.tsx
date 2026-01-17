@@ -9,37 +9,11 @@ import DischargeStationsContent from '../components/content/DischargeStationsCon
 import AutomaticWeatherContent from '../components/content/AutomaticWeatherContent';
 import RainGaugeContent from '../components/content/RainGaugeContent';
 import WeatherStatistics from '../components/content/WeatherStatistics';
+import { getDashboardData, getDischargeStatistics } from '../services/dataService';
 
-// Mock data for charts matching Figma design
-const dischargeData = [
-    { name: 'SCYR', value: 450 },
-    { name: 'KYR', value: 480 },
-    { name: '', value: 420 },
-    { name: '', value: 490 },
-    { name: '', value: 520 },
-    { name: '', value: 480 },
-    { name: '', value: 500 },
-];
-
-const velocityData = [
-    { name: '', value: 420 },
-    { name: '', value: 480 },
-    { name: '', value: 460 },
-    { name: '', value: 480 },
-    { name: '', value: 440 },
-    { name: '', value: 420 },
-    { name: '', value: 400 },
-];
-
-const waterLevelData = [
-    { name: '', value: 450 },
-    { name: '', value: 480 },
-    { name: '', value: 420 },
-    { name: '', value: 480 },
-    { name: '', value: 350 },
-    { name: '', value: 420 },
-    { name: '', value: 380 },
-];
+// Get data from the data service
+const dashboardData = getDashboardData();
+const statisticsData = getDischargeStatistics();
 
 export default function Overview() {
     const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -83,16 +57,32 @@ export default function Overview() {
         return (
             <div className="flex flex-col min-h-0 h-full">
                 <h2 className="text-2xl font-bold mb-2" style={{ color: '#303030' }}>
-                    Statistics
+                    {statisticsData.sectionTitle}
                 </h2>
                 <div className="grid grid-rows-3 gap-2 flex-1 overflow-hidden">
-                    <StatisticsChart title="Discharge" data={dischargeData} maxValue={600} />
-                    <StatisticsChart title="Velocity" data={velocityData} maxValue={600} />
-                    <StatisticsChart title="Water Level" data={waterLevelData} maxValue={600} />
+                    <StatisticsChart
+                        title={statisticsData.charts.discharge.title}
+                        data={statisticsData.charts.discharge.data}
+                        maxValue={statisticsData.charts.discharge.maxValue}
+                    />
+                    <StatisticsChart
+                        title={statisticsData.charts.velocity.title}
+                        data={statisticsData.charts.velocity.data}
+                        maxValue={statisticsData.charts.velocity.maxValue}
+                    />
+                    <StatisticsChart
+                        title={statisticsData.charts.waterLevel.title}
+                        data={statisticsData.charts.waterLevel.data}
+                        maxValue={statisticsData.charts.waterLevel.maxValue}
+                    />
                 </div>
             </div>
         );
     };
+
+    // Get metrics from data
+    const metrics = dashboardData.metrics;
+    const lastUpdated = dashboardData.lastUpdated;
 
     return (
         <div className="h-screen flex flex-col" style={{ backgroundColor: '#f5f5f5' }}>
@@ -103,26 +93,15 @@ export default function Overview() {
                     {/* Metrics Row */}
                     <div className="flex gap-2">
                         <div className="flex-1 grid grid-cols-5 gap-2">
-                            <MetricCard
-                                title="Discharge Stations"
-                                value="08"
-                                isActive={activeMetric === 'discharge'}
-                                onClick={() => setActiveTab('discharge')}
-                            />
-                            <MetricCard
-                                title="Automatic Weather Stations"
-                                value="03"
-                                isActive={activeMetric === 'weather'}
-                                onClick={() => setActiveTab('weather')}
-                            />
-                            <MetricCard
-                                title="Rain Gauge Stations"
-                                value="09"
-                                isActive={activeMetric === 'rain-gauge'}
-                                onClick={() => setActiveTab('rain-gauge')}
-                            />
-                            <MetricCard title="Juddo Pond Level" value="02" />
-                            <MetricCard title="Juddo Forebay Level" value="02" />
+                            {metrics.map((metric) => (
+                                <MetricCard
+                                    key={metric.id}
+                                    title={metric.title}
+                                    value={metric.value}
+                                    isActive={activeMetric === metric.id}
+                                    onClick={metric.clickable ? () => setActiveTab(metric.id as TabType) : undefined}
+                                />
+                            ))}
                         </div>
 
                         <div
@@ -142,10 +121,10 @@ export default function Overview() {
                                 />
                                 <div>
                                     <div className="text-base font-semibold" style={{ color: '#369fff' }}>
-                                        10 January 2026
+                                        {lastUpdated.date}
                                     </div>
                                     <div className="text-base font-semibold" style={{ color: '#369fff' }}>
-                                        10:00 AM
+                                        {lastUpdated.time}
                                     </div>
                                 </div>
                             </div>

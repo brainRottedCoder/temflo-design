@@ -1,0 +1,44 @@
+{
+    "sectionTitle": "Automatic Weather Stations",
+    "stations": [
+        {
+            "id": "ws-001",
+            "title": "Syana Chatti Yamuna River",
+            "windSpeed": "03",
+            "windDirection": "03",
+            "temperature": "03",
+            "relativeHumidity": "03",
+            "airPressure": "03",
+            "solarRadiation": "03",
+            "rainfallHR": "03",
+            "rainfallDay": "03",
+            "rainfallTotal": "03"
+        },
+        {
+            "id": "ws-002",
+            "title": "Syana Chatti Yamuna River",
+            "windSpeed": "03",
+            "windDirection": "03",
+            "temperature": "03",
+            "relativeHumidity": "03",
+            "airPressure": "03",
+            "solarRadiation": "03",
+            "rainfallHR": "03",
+            "rainfallDay": "03",
+            "rainfallTotal": "03"
+        },
+        {
+            "id": "ws-003",
+            "title": "Syana Chatti Yamuna River",
+            "windSpeed": "03",
+            "windDirection": "03",
+            "temperature": "03",
+            "relativeHumidity": "03",
+            "airPressure": "03",
+            "solarRadiation": "03",
+            "rainfallHR": "03",
+            "rainfallDay": "03",
+            "rainfallTotal": "03"
+        }
+    ]
+}

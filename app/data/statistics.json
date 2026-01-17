@@ -1,0 +1,256 @@
+{
+    "discharge": {
+        "sectionTitle": "Statistics",
+        "charts": {
+            "discharge": {
+                "title": "Discharge",
+                "data": [
+                    {
+                        "name": "SCYR",
+                        "value": 450
+                    },
+                    {
+                        "name": "KYR",
+                        "value": 480
+                    },
+                    {
+                        "name": "",
+                        "value": 420
+                    },
+                    {
+                        "name": "",
+                        "value": 490
+                    },
+                    {
+                        "name": "",
+                        "value": 520
+                    },
+                    {
+                        "name": "",
+                        "value": 480
+                    },
+                    {
+                        "name": "",
+                        "value": 500
+                    }
+                ],
+                "maxValue": 600
+            },
+            "velocity": {
+                "title": "Velocity",
+                "data": [
+                    {
+                        "name": "",
+                        "value": 420
+                    },
+                    {
+                        "name": "",
+                        "value": 480
+                    },
+                    {
+                        "name": "",
+                        "value": 460
+                    },
+                    {
+                        "name": "",
+                        "value": 480
+                    },
+                    {
+                        "name": "",
+                        "value": 440
+                    },
+                    {
+                        "name": "",
+                        "value": 420
+                    },
+                    {
+                        "name": "",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 600
+            },
+            "waterLevel": {
+                "title": "Water Level",
+                "data": [
+                    {
+                        "name": "",
+                        "value": 450
+                    },
+                    {
+                        "name": "",
+                        "value": 480
+                    },
+                    {
+                        "name": "",
+                        "value": 420
+                    },
+                    {
+                        "name": "",
+                        "value": 480
+                    },
+                    {
+                        "name": "",
+                        "value": 350
+                    },
+                    {
+                        "name": "",
+                        "value": 420
+                    },
+                    {
+                        "name": "",
+                        "value": 380
+                    }
+                ],
+                "maxValue": 600
+            }
+        }
+    },
+    "weather": {
+        "sectionTitle": "Statistics",
+        "stations": [
+            {
+                "name": "Syana Chatti",
+                "data": {
+                    "windSpeed": [
+                        {
+                            "name": "AM",
+                            "value": 320
+                        },
+                        {
+                            "name": "PM",
+                            "value": 380
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 350
+                        }
+                    ],
+                    "humidity": [
+                        {
+                            "name": "AM",
+                            "value": 450
+                        },
+                        {
+                            "name": "PM",
+                            "value": 420
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 400
+                        }
+                    ],
+                    "temperature": [
+                        {
+                            "name": "AM",
+                            "value": 280
+                        },
+                        {
+                            "name": "PM",
+                            "value": 420
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 350
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Yamuna River",
+                "data": {
+                    "windSpeed": [
+                        {
+                            "name": "AM",
+                            "value": 390
+                        },
+                        {
+                            "name": "PM",
+                            "value": 420
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 380
+                        }
+                    ],
+                    "humidity": [
+                        {
+                            "name": "AM",
+                            "value": 400
+                        },
+                        {
+                            "name": "PM",
+                            "value": 480
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 440
+                        }
+                    ],
+                    "temperature": [
+                        {
+                            "name": "AM",
+                            "value": 300
+                        },
+                        {
+                            "name": "PM",
+                            "value": 450
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 380
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "River 3",
+                "data": {
+                    "windSpeed": [
+                        {
+                            "name": "AM",
+                            "value": 350
+                        },
+                        {
+                            "name": "PM",
+                            "value": 400
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 320
+                        }
+                    ],
+                    "humidity": [
+                        {
+                            "name": "AM",
+                            "value": 420
+                        },
+                        {
+                            "name": "PM",
+                            "value": 390
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 410
+                        }
+                    ],
+                    "temperature": [
+                        {
+                            "name": "AM",
+                            "value": 320
+                        },
+                        {
+                            "name": "PM",
+                            "value": 400
+                        },
+                        {
+                            "name": "EVE",
+                            "value": 360
+                        }
+                    ]
+                }
+            }
+        ],
+        "maxValue": 500
+    }
+}
