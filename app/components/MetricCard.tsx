@@ -17,25 +17,31 @@ export default function MetricCard({
 
   return (
     <div
-      className={`rounded-[14px] px-3 py-2 min-h-[80px] transition-all ${onClick ? 'cursor-pointer hover:scale-[1.02] hover:shadow-lg' : ''}`}
+      className={`rounded-[14px] px-4 py-3 min-h-[90px] transition-all flex flex-col ${onClick ? 'cursor-pointer hover:scale-[1.02] hover:shadow-lg' : ''}`}
       style={{
         backgroundColor: showActiveStyle ? 'rgba(37, 34, 227, 0.70)' : 'rgba(54, 159, 255, 0.10)',
       }}
       onClick={onClick}
     >
+      {/* Title at top left */}
       <div
-        className="text-base font-semibold mb-1 leading-tight"
+        className="text-sm font-semibold leading-tight"
         style={{ color: showActiveStyle ? '#ffffff' : '#8ea3b7' }}
       >
         {title}
       </div>
-      <div className="flex items-end gap-2">
+
+      {/* Spacer to push content to bottom */}
+      <div className="flex-1" />
+
+      {/* Value row - positioned at bottom with bar on left and number on right */}
+      <div className="flex items-end justify-between">
         <div
-          className="h-[32px] w-[5px] rounded-sm"
+          className="h-[28px] w-[4px] rounded-sm"
           style={{ backgroundColor: showActiveStyle ? 'rgba(255,255,255,0.6)' : '#369fff' }}
         />
         <span
-          className="text-[48px] font-bold leading-none"
+          className="text-[42px] font-bold leading-none"
           style={{ color: showActiveStyle ? '#ffffff' : '#369fff' }}
         >
           {value}

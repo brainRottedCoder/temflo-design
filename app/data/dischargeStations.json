@@ -11,7 +11,7 @@
         },
         {
             "id": "ds-002",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Ganga River",
             "discharge": "03",
             "velocity": "03",
             "waterLevel": "03",
@@ -19,7 +19,7 @@
         },
         {
             "id": "ds-003",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Satluj River",
             "discharge": "03",
             "velocity": "03",
             "waterLevel": "03",
@@ -27,7 +27,7 @@
         },
         {
             "id": "ds-004",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Brahmaputra River",
             "discharge": "03",
             "velocity": "03",
             "waterLevel": "03",
@@ -35,7 +35,7 @@
         },
         {
             "id": "ds-005",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Indus River",
             "discharge": "03",
             "velocity": "03",
             "waterLevel": "03",
@@ -43,7 +43,7 @@
         },
         {
             "id": "ds-006",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Jamuna River",
             "discharge": "03",
             "velocity": "03",
             "waterLevel": "03",
@@ -51,7 +51,7 @@
         },
         {
             "id": "ds-007",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Kosi River",
             "discharge": "03",
             "velocity": "03",
             "waterLevel": "03",
@@ -59,7 +59,7 @@
         },
         {
             "id": "ds-008",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Kaveri River",
             "discharge": "03",
             "velocity": "03",
             "waterLevel": "03",

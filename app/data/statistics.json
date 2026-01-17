@@ -10,27 +10,31 @@
                         "value": 450
                     },
                     {
-                        "name": "KYR",
+                        "name": "GR",
                         "value": 480
                     },
                     {
-                        "name": "",
+                        "name": "Sr",
                         "value": 420
                     },
                     {
-                        "name": "",
+                        "name": "Br",
                         "value": 490
                     },
                     {
-                        "name": "",
+                        "name": "InR",
                         "value": 520
                     },
                     {
-                        "name": "",
+                        "name": "JR",
                         "value": 480
                     },
                     {
-                        "name": "",
+                        "name": "Ko",
+                        "value": 500
+                    },
+                    {
+                        "name": "Kv",
                         "value": 500
                     }
                 ],
@@ -40,31 +44,35 @@
                 "title": "Velocity",
                 "data": [
                     {
-                        "name": "",
+                        "name": "SCYR",
                         "value": 420
                     },
                     {
-                        "name": "",
+                        "name": "GR",
                         "value": 480
                     },
                     {
-                        "name": "",
+                        "name": "Sr",
                         "value": 460
                     },
                     {
-                        "name": "",
+                        "name": "Br",
                         "value": 480
                     },
                     {
-                        "name": "",
+                        "name": "InR",
                         "value": 440
                     },
                     {
-                        "name": "",
+                        "name": "JR",
                         "value": 420
                     },
                     {
-                        "name": "",
+                        "name": "Ko",
+                        "value": 400
+                    },
+                    {
+                        "name": "Kv",
                         "value": 400
                     }
                 ],
@@ -74,31 +82,35 @@
                 "title": "Water Level",
                 "data": [
                     {
-                        "name": "",
+                        "name": "SCYR",
                         "value": 450
                     },
                     {
-                        "name": "",
+                        "name": "GR",
                         "value": 480
                     },
                     {
-                        "name": "",
+                        "name": "Sr",
                         "value": 420
                     },
                     {
-                        "name": "",
+                        "name": "Br",
                         "value": 480
                     },
                     {
-                        "name": "",
+                        "name": "InR",
                         "value": 350
                     },
                     {
-                        "name": "",
+                        "name": "JR",
                         "value": 420
                     },
                     {
-                        "name": "",
+                        "name": "Ko",
+                        "value": 380
+                    },
+                    {
+                        "name": "Kv",
                         "value": 380
                     }
                 ],
@@ -110,141 +122,141 @@
         "sectionTitle": "Statistics",
         "stations": [
             {
-                "name": "Syana Chatti",
+                "name": "",
                 "data": {
                     "windSpeed": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 320
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 380
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 350
                         }
                     ],
                     "humidity": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 450
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 420
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 400
                         }
                     ],
                     "temperature": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 280
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 420
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 350
                         }
                     ]
                 }
             },
             {
-                "name": "Yamuna River",
+                "name": "",
                 "data": {
                     "windSpeed": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 390
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 420
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 380
                         }
                     ],
                     "humidity": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 400
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 480
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 440
                         }
                     ],
                     "temperature": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 300
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 450
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 380
                         }
                     ]
                 }
             },
             {
-                "name": "River 3",
+                "name": "",
                 "data": {
                     "windSpeed": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 350
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 400
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 320
                         }
                     ],
                     "humidity": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 420
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 390
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 410
                         }
                     ],
                     "temperature": [
                         {
-                            "name": "AM",
+                            "name": "SC",
                             "value": 320
                         },
                         {
-                            "name": "PM",
+                            "name": "GS",
                             "value": 400
                         },
                         {
-                            "name": "EVE",
+                            "name": "IK",
                             "value": 360
                         }
                     ]
