@@ -4,6 +4,8 @@ interface StationCardProps {
   velocity: string;
   waterLevel: string;
   color: 'blue' | 'orange' | 'green' | 'yellow';
+  isSelected?: boolean;
+  onClick?: () => void;
 }
 
 const colorConfig = {
@@ -31,17 +33,23 @@ export default function StationCard({
   velocity,
   waterLevel,
   color,
+  isSelected = false,
+  onClick,
 }: StationCardProps) {
   const config = colorConfig[color];
 
   return (
     <div
-      className="rounded-2xl px-3 py-2 text-white h-full flex flex-col overflow-hidden"
+      className={`rounded-2xl px-3 py-2 text-white h-full flex flex-col overflow-hidden transition-all cursor-pointer ${isSelected ? 'ring-4 ring-purple-500 ring-offset-2 scale-[1.02]' : 'hover:scale-[1.01]'
+        }`}
       style={{
         background: config.bg,
-        boxShadow: `0 4px 12px ${config.solid}30`,
+        boxShadow: isSelected
+          ? `0 8px 20px ${config.solid}50`
+          : `0 4px 12px ${config.solid}30`,
         minHeight: 0,
       }}
+      onClick={onClick}
     >
       {/* Title */}
       <h3 className="text-base font-bold leading-tight mb-1">{title}</h3>

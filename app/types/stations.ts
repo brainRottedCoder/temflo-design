@@ -5,6 +5,7 @@ export type StationColor = 'blue' | 'green' | 'orange' | 'yellow';
 export interface DischargeStation {
     id: string;
     title: string;
+    chartKey: string;
     discharge: string;
     velocity: string;
     waterLevel: string;

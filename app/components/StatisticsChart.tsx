@@ -1,18 +1,31 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface StatisticsChartProps {
   title: string;
   data: { name: string; value: number }[];
   maxValue: number;
   labelColor?: string;
+  highlightedKey?: string | null;
 }
 
-export default function StatisticsChart({ title, data, maxValue }: StatisticsChartProps) {
+export default function StatisticsChart({ title, data, maxValue, highlightedKey }: StatisticsChartProps) {
   // Generate unique gradient ID based on title to prevent conflicts
   const gradientId = `purpleGradient-${title.replace(/\s+/g, '')}`;
+  const gradientDimmedId = `purpleDimmedGradient-${title.replace(/\s+/g, '')}`;
   const shadowId = `barShadow-${title.replace(/\s+/g, '')}`;
+
+  // Determine if a bar should be highlighted
+  const getBarOpacity = (name: string) => {
+    if (!highlightedKey) return 1; // No selection, all bars full opacity
+    return name === highlightedKey ? 1 : 0.25; // Dim non-selected bars
+  };
+
+  const getBarFill = (name: string) => {
+    if (!highlightedKey) return `url(#${gradientId})`; // No selection
+    return name === highlightedKey ? `url(#${gradientId})` : `url(#${gradientDimmedId})`;
+  };
 
   return (
     <div className="bg-white rounded-2xl h-full flex flex-col relative overflow-hidden" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
@@ -36,10 +49,15 @@ export default function StatisticsChart({ title, data, maxValue }: StatisticsCha
             barCategoryGap="35%"
           >
             <defs>
-              {/* Purple gradient for bars */}
+              {/* Purple gradient for highlighted bars */}
               <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#7C3AED" />
                 <stop offset="100%" stopColor="#6D28D9" />
+              </linearGradient>
+              {/* Dimmed gradient for non-selected bars */}
+              <linearGradient id={gradientDimmedId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#C4B5FD" />
+                <stop offset="100%" stopColor="#DDD6FE" />
               </linearGradient>
               {/* Shadow filter for bars */}
               <filter id={shadowId} x="-100%" y="-50%" width="300%" height="200%">
@@ -85,11 +103,18 @@ export default function StatisticsChart({ title, data, maxValue }: StatisticsCha
 
             <Bar
               dataKey="value"
-              fill={`url(#${gradientId})`}
               radius={[3, 3, 0, 0]}
               barSize={9}
-              style={{ filter: `url(#${shadowId})` }}
-            />
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={getBarFill(entry.name)}
+                  opacity={getBarOpacity(entry.name)}
+                  style={entry.name === highlightedKey || !highlightedKey ? { filter: `url(#${shadowId})` } : undefined}
+                />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>

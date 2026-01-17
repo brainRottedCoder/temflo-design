@@ -1,3 +1,4 @@
+import React from 'react';
 import CompactChart from '../CompactChart';
 import { getWeatherStatistics } from '../../services/dataService';
 
@@ -11,30 +12,27 @@ export default function WeatherStatistics() {
                 {weatherStats.sectionTitle}
             </h2>
             <div className="grid grid-cols-3 grid-rows-3 gap-2 flex-1">
-                {weatherStats.stations.map((station) => (
-                    <>
+                {weatherStats.stations.map((station, index) => (
+                    <React.Fragment key={`station-${index}`}>
                         <CompactChart
-                            key={`${station.name}-wind`}
                             title="Wind Speed"
                             riverName={station.name}
                             data={station.data.windSpeed}
                             maxValue={weatherStats.maxValue}
                         />
                         <CompactChart
-                            key={`${station.name}-humidity`}
                             title="Humidity"
                             riverName={station.name}
                             data={station.data.humidity}
                             maxValue={weatherStats.maxValue}
                         />
                         <CompactChart
-                            key={`${station.name}-temp`}
                             title="Temperature"
                             riverName={station.name}
                             data={station.data.temperature}
                             maxValue={weatherStats.maxValue}
                         />
-                    </>
+                    </React.Fragment>
                 ))}
             </div>
         </div>

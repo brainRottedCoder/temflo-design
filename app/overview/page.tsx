@@ -17,6 +17,10 @@ const statisticsData = getDischargeStatistics();
 
 export default function Overview() {
     const [activeTab, setActiveTab] = useState<TabType>('overview');
+    const [selectedStation, setSelectedStation] = useState<{ chartKey: string | null; title: string | null }>({
+        chartKey: null,
+        title: null
+    });
 
     // Determine which metric card should be active based on tab
     const getActiveMetric = () => {
@@ -34,6 +38,11 @@ export default function Overview() {
 
     const activeMetric = getActiveMetric();
 
+    // Handle station selection
+    const handleStationSelect = (chartKey: string | null, title: string | null) => {
+        setSelectedStation({ chartKey, title });
+    };
+
     // Render content based on active tab
     const renderContent = () => {
         switch (activeTab) {
@@ -44,7 +53,7 @@ export default function Overview() {
             case 'discharge':
             case 'overview':
             default:
-                return <DischargeStationsContent />;
+                return <DischargeStationsContent onStationSelect={handleStationSelect} />;
         }
     };
 
@@ -56,24 +65,40 @@ export default function Overview() {
 
         return (
             <div className="flex flex-col min-h-0 h-full">
-                <h2 className="text-2xl font-bold mb-2" style={{ color: '#303030' }}>
-                    {statisticsData.sectionTitle}
-                </h2>
+                <div className="flex items-center gap-3 mb-2">
+                    <h2 className="text-2xl font-bold" style={{ color: '#303030' }}>
+                        {statisticsData.sectionTitle}
+                    </h2>
+                    {selectedStation.title && (
+                        <span
+                            className="px-3 py-1 rounded-full text-sm font-semibold"
+                            style={{
+                                backgroundColor: 'rgba(124, 58, 237, 0.15)',
+                                color: '#7C3AED'
+                            }}
+                        >
+                            {selectedStation.title}
+                        </span>
+                    )}
+                </div>
                 <div className="grid grid-rows-3 gap-2 flex-1 overflow-hidden">
                     <StatisticsChart
                         title={statisticsData.charts.discharge.title}
                         data={statisticsData.charts.discharge.data}
                         maxValue={statisticsData.charts.discharge.maxValue}
+                        highlightedKey={selectedStation.chartKey}
                     />
                     <StatisticsChart
                         title={statisticsData.charts.velocity.title}
                         data={statisticsData.charts.velocity.data}
                         maxValue={statisticsData.charts.velocity.maxValue}
+                        highlightedKey={selectedStation.chartKey}
                     />
                     <StatisticsChart
                         title={statisticsData.charts.waterLevel.title}
                         data={statisticsData.charts.waterLevel.data}
                         maxValue={statisticsData.charts.waterLevel.maxValue}
+                        highlightedKey={selectedStation.chartKey}
                     />
                 </div>
             </div>
