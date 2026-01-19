@@ -17,7 +17,7 @@ export default function MetricCard({
 
   return (
     <div
-      className={`rounded-[14px] px-4 py-3 min-h-[90px] transition-all flex flex-col ${onClick ? 'cursor-pointer hover:scale-[1.02] hover:shadow-lg' : ''}`}
+      className={`rounded-[14px] px-4 py-3 min-h-[95px] transition-all flex flex-col ${onClick ? 'cursor-pointer hover:scale-[1.02] hover:shadow-lg' : ''}`}
       style={{
         backgroundColor: showActiveStyle ? 'rgba(37, 34, 227, 0.70)' : 'rgba(54, 159, 255, 0.10)',
       }}

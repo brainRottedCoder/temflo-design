@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import StationCard from '../StationCard';
 import { getDischargeStations } from '../../services/dataService';
 
@@ -9,29 +9,61 @@ const stationsData = getDischargeStations();
 
 interface DischargeStationsContentProps {
     onStationSelect?: (chartKey: string | null, title: string | null) => void;
+    selectedChartKeys?: string[];  // Passed from parent to sync selection state
+    onClearAll?: () => void;  // Callback to clear all selections
 }
 
-export default function DischargeStationsContent({ onStationSelect }: DischargeStationsContentProps) {
-    const [selectedId, setSelectedId] = useState<string | null>(null);
+export default function DischargeStationsContent({ onStationSelect, selectedChartKeys = [], onClearAll }: DischargeStationsContentProps) {
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+    // Sync local selection state with parent's selectedChartKeys
+    useEffect(() => {
+        if (selectedChartKeys.length === 0) {
+            setSelectedIds([]);
+        }
+    }, [selectedChartKeys]);
 
     const handleCardClick = (id: string, chartKey: string, title: string) => {
-        if (selectedId === id) {
-            // Deselect if clicking the same card
-            setSelectedId(null);
-            onStationSelect?.(null, null);
-        } else {
-            // Select new card
-            setSelectedId(id);
-            onStationSelect?.(chartKey, title);
-        }
+        setSelectedIds(prev => {
+            const isSelected = prev.includes(id);
+            if (isSelected) {
+                // Deselect - remove from array
+                return prev.filter(selectedId => selectedId !== id);
+            } else {
+                // Select - add to array
+                return [...prev, id];
+            }
+        });
+        // Pass to parent for chart highlighting
+        onStationSelect?.(chartKey, title);
+    };
+
+    const handleClearAll = () => {
+        setSelectedIds([]);
+        onClearAll?.();
     };
 
     return (
         <div className="flex flex-col min-h-0 h-full overflow-hidden">
-            <h2 className="text-xl font-bold mb-1.5 flex-shrink-0" style={{ color: '#303030' }}>
-                {stationsData.sectionTitle}
-            </h2>
-            <div className="grid grid-cols-2 grid-rows-4 gap-1 flex-1 min-h-0 overflow-hidden">
+            <div className="flex items-center justify-between mb-1.5 flex-shrink-0">
+                <h2 className="text-xl font-bold" style={{ color: '#303030' }}>
+                    {stationsData.sectionTitle}
+                </h2>
+                {selectedIds.length > 0 && (
+                    <button
+                        onClick={handleClearAll}
+                        className="px-2 py-0.5 rounded-full text-xs font-semibold transition-colors hover:bg-red-100"
+                        style={{
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            color: '#EF4444',
+                            border: '1px solid rgba(239, 68, 68, 0.3)'
+                        }}
+                    >
+                        Clear All
+                    </button>
+                )}
+            </div>
+            <div className="grid grid-cols-2 grid-rows-4 gap-2 flex-1 min-h-0 overflow-hidden p-1">
                 {stationsData.stations.map((station) => (
                     <StationCard
                         key={station.id}
@@ -40,7 +72,7 @@ export default function DischargeStationsContent({ onStationSelect }: DischargeS
                         velocity={station.velocity}
                         waterLevel={station.waterLevel}
                         color={station.color}
-                        isSelected={selectedId === station.id}
+                        isSelected={selectedIds.includes(station.id)}
                         onClick={() => handleCardClick(station.id, station.chartKey, station.title)}
                     />
                 ))}

@@ -29,12 +29,12 @@ export default function Header({ activeTab = 'overview', onTabChange }: HeaderPr
         </div>
 
         {/* Navigation Tabs */}
-        <nav className="flex gap-10">
+        <nav className="flex gap-10 ">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => onTabChange?.(tab.id)}
-              className={`px-6 py-2.5 text-sm font-medium font-semibold rounded-md border-2 transition-all ${activeTab === tab.id
+              className={`px-6 py-2.5 text-sm cursor-pointer font-medium font-semibold rounded-md border-2 transition-all ${activeTab === tab.id
                 ? 'bg-white text-blue-500 border-blue-500'
                 : 'bg-white text-gray-400 border-gray-200 hover:border-gray-300 hover:text-gray-500'
                 }`}

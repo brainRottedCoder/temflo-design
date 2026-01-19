@@ -6,114 +6,86 @@ interface StatisticsChartProps {
   title: string;
   data: { name: string; value: number }[];
   maxValue: number;
+  highlightedKeys?: string[];  // Changed to array for multi-select
   labelColor?: string;
-  highlightedKey?: string | null;
 }
 
-export default function StatisticsChart({ title, data, maxValue, highlightedKey }: StatisticsChartProps) {
-  // Generate unique gradient ID based on title to prevent conflicts
-  const gradientId = `purpleGradient-${title.replace(/\s+/g, '')}`;
-  const gradientDimmedId = `purpleDimmedGradient-${title.replace(/\s+/g, '')}`;
-  const shadowId = `barShadow-${title.replace(/\s+/g, '')}`;
+const labelColors: Record<string, string> = {
+  'Discharge': '#8ac53e',
+  'Velocity': '#ffd143',
+  'Water Level': '#ff993a',
+};
 
-  // Determine if a bar should be highlighted
-  const getBarOpacity = (name: string) => {
-    if (!highlightedKey) return 1; // No selection, all bars full opacity
-    return name === highlightedKey ? 1 : 0.25; // Dim non-selected bars
-  };
+export default function StatisticsChart({ title, data, maxValue, highlightedKeys = [] }: StatisticsChartProps) {
+  const pillColor = labelColors[title] || '#8ac53e';
+  const hasSelection = highlightedKeys.length > 0;
 
-  const getBarFill = (name: string) => {
-    if (!highlightedKey) return `url(#${gradientId})`; // No selection
-    return name === highlightedKey ? `url(#${gradientId})` : `url(#${gradientDimmedId})`;
-  };
+  // Create a safe ID by removing spaces
+  const safeId = title.replace(/\s+/g, '');
 
   return (
-    <div className="bg-white rounded-2xl h-full flex flex-col relative overflow-hidden" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-      {/* Pill label positioned in top-left corner */}
+    <div className="bg-white rounded-lg shadow-[0_2px_24px_rgba(0,0,0,0.05)] p-3 h-full flex flex-col">
       <div
-        className="inline-block px-4 py-1.5 rounded-full text-sm font-semibold w-fit m-2 mb-0"
-        style={{
-          backgroundColor: 'rgba(240, 220, 230, 0.95)',
-          color: '#7C3AED',
-        }}
+        className="inline-block px-3 py-1 rounded-md text-[11px] font-medium text-white mb-2 w-fit"
+        style={{ backgroundColor: pillColor }}
       >
         {title}
       </div>
-
-      {/* Chart container */}
-      <div className="flex-1 min-h-0 px-1" style={{ minHeight: '80px' }}>
+      <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={data}
-            margin={{ top: 10, right: 15, left: 0, bottom: 5 }}
-            barCategoryGap="35%"
-          >
+          <BarChart data={data} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
             <defs>
-              {/* Purple gradient for highlighted bars */}
-              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={`purpleGradient-${safeId}`} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#7C3AED" />
-                <stop offset="100%" stopColor="#6D28D9" />
+                <stop offset="100%" stopColor="#6366F1" />
               </linearGradient>
-              {/* Dimmed gradient for non-selected bars */}
-              <linearGradient id={gradientDimmedId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#C4B5FD" />
-                <stop offset="100%" stopColor="#DDD6FE" />
+              <linearGradient id={`dimmedGradient-${safeId}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#D1D5DB" />
+                <stop offset="100%" stopColor="#E5E7EB" />
               </linearGradient>
-              {/* Shadow filter for bars */}
-              <filter id={shadowId} x="-100%" y="-50%" width="300%" height="200%">
-                <feDropShadow dx="3" dy="0" stdDeviation="2" floodColor="rgba(109, 40, 217, 0.4)" />
-              </filter>
             </defs>
-
-            <CartesianGrid
-              strokeDasharray="0"
-              stroke="#F3F4F6"
-              vertical={false}
-            />
-
+            <CartesianGrid strokeDasharray="0" stroke="#E8E8E8" vertical={false} />
             <XAxis
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#6B7280', fontSize: 10, fontWeight: 500, fontFamily: 'Inter, sans-serif' }}
-              dy={5}
+              tick={{ fill: '#369fff', fontSize: 12, fontWeight: 600, fontFamily: 'Manrope, sans-serif' }}
             />
-
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#9CA3AF', fontSize: 11, fontWeight: 400, fontFamily: 'Inter, sans-serif' }}
+              tick={{ fill: '#9CA3AF', fontSize: 11, fontFamily: 'SF Pro Text, -apple-system, sans-serif' }}
               domain={[0, maxValue]}
               ticks={[200, 300, 400, 500]}
               tickFormatter={(value) => `${value} m`}
               width={50}
             />
-
             <Tooltip
               contentStyle={{
                 backgroundColor: '#FFFFFF',
                 border: '1px solid #E5E7EB',
                 borderRadius: '8px',
-                fontSize: '12px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                fontSize: '12px'
               }}
               formatter={(value) => [`${value} m`, title]}
-              cursor={{ fill: 'rgba(168, 85, 247, 0.05)' }}
             />
-
             <Bar
               dataKey="value"
-              radius={[3, 3, 0, 0]}
-              barSize={9}
+              radius={[4, 4, 0, 0]}
+              barSize={10}
             >
-              {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={getBarFill(entry.name)}
-                  opacity={getBarOpacity(entry.name)}
-                  style={entry.name === highlightedKey || !highlightedKey ? { filter: `url(#${shadowId})` } : undefined}
-                />
-              ))}
+              {data.map((entry, index) => {
+                // If no selection, all bars are highlighted
+                // If selection exists, only selected bars are highlighted
+                const isHighlighted = !hasSelection || highlightedKeys.includes(entry.name);
+                return (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={isHighlighted ? `url(#purpleGradient-${safeId})` : `url(#dimmedGradient-${safeId})`}
+                    opacity={isHighlighted ? 1 : 0.5}
+                  />
+                );
+              })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>

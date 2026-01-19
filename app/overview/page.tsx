@@ -27,16 +27,16 @@ const TAB_LABELS: Record<TabType, string> = {
 
 export default function Overview() {
     const [activeTab, setActiveTab] = useState<TabType>('overview');
-    const [selectedStation, setSelectedStation] = useState<{ chartKey: string | null; title: string | null }>({
-        chartKey: null,
-        title: null
+    const [selectedStations, setSelectedStations] = useState<{ chartKeys: string[]; titles: string[] }>({
+        chartKeys: [],
+        titles: []
     });
 
     // Handle tab change with callback
     const handleTabChange = useCallback((tab: TabType | string) => {
         setActiveTab(tab as TabType);
         // Reset station selection when changing tabs
-        setSelectedStation({ chartKey: null, title: null });
+        setSelectedStations({ chartKeys: [], titles: [] });
     }, []);
 
     // Auto-loop hook for large screens
@@ -65,9 +65,30 @@ export default function Overview() {
 
     const activeMetric = getActiveMetric();
 
-    // Handle station selection
+    // Handle station selection (toggle for multi-select)
     const handleStationSelect = (chartKey: string | null, title: string | null) => {
-        setSelectedStation({ chartKey, title });
+        if (!chartKey || !title) {
+            // Clear all selections if null passed
+            setSelectedStations({ chartKeys: [], titles: [] });
+            return;
+        }
+
+        setSelectedStations(prev => {
+            const keyIndex = prev.chartKeys.indexOf(chartKey);
+            if (keyIndex > -1) {
+                // Remove if already selected
+                return {
+                    chartKeys: prev.chartKeys.filter(k => k !== chartKey),
+                    titles: prev.titles.filter((_, i) => i !== keyIndex)
+                };
+            } else {
+                // Add to selection
+                return {
+                    chartKeys: [...prev.chartKeys, chartKey],
+                    titles: [...prev.titles, title]
+                };
+            }
+        });
     };
 
     // Render content based on active tab
@@ -80,7 +101,11 @@ export default function Overview() {
             case 'discharge':
             case 'overview':
             default:
-                return <DischargeStationsContent onStationSelect={handleStationSelect} />;
+                return <DischargeStationsContent
+                    onStationSelect={handleStationSelect}
+                    selectedChartKeys={selectedStations.chartKeys}
+                    onClearAll={() => setSelectedStations({ chartKeys: [], titles: [] })}
+                />;
         }
     };
 
@@ -92,40 +117,41 @@ export default function Overview() {
 
         return (
             <div className="flex flex-col min-h-0 h-full">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
                     <h2 className="text-2xl font-bold" style={{ color: '#303030' }}>
                         {statisticsData.sectionTitle}
                     </h2>
-                    {selectedStation.title && (
+                    {selectedStations.titles.map((title, index) => (
                         <span
-                            className="px-3 py-1 rounded-full text-sm font-semibold"
+                            key={index}
+                            className="px-2 py-0.5 rounded-full text-xs font-semibold"
                             style={{
                                 backgroundColor: 'rgba(124, 58, 237, 0.15)',
                                 color: '#7C3AED'
                             }}
                         >
-                            {selectedStation.title}
+                            {title}
                         </span>
-                    )}
+                    ))}
                 </div>
                 <div className="grid grid-rows-3 gap-2 flex-1 overflow-hidden">
                     <StatisticsChart
                         title={statisticsData.charts.discharge.title}
                         data={statisticsData.charts.discharge.data}
                         maxValue={statisticsData.charts.discharge.maxValue}
-                        highlightedKey={selectedStation.chartKey}
+                        highlightedKeys={selectedStations.chartKeys}
                     />
                     <StatisticsChart
                         title={statisticsData.charts.velocity.title}
                         data={statisticsData.charts.velocity.data}
                         maxValue={statisticsData.charts.velocity.maxValue}
-                        highlightedKey={selectedStation.chartKey}
+                        highlightedKeys={selectedStations.chartKeys}
                     />
                     <StatisticsChart
                         title={statisticsData.charts.waterLevel.title}
                         data={statisticsData.charts.waterLevel.data}
                         maxValue={statisticsData.charts.waterLevel.maxValue}
-                        highlightedKey={selectedStation.chartKey}
+                        highlightedKeys={selectedStations.chartKeys}
                     />
                 </div>
             </div>
@@ -157,7 +183,7 @@ export default function Overview() {
                         </div>
 
                         <div
-                            className="rounded-xl px-3 py-2 min-w-[160px]"
+                            className="rounded-xl px-5 py-3 min-w-[20%]"
                             style={{ backgroundColor: '#f7f7f7' }}
                         >
                             <div className="text-base font-semibold mb-1" style={{ color: '#369fff' }}>
