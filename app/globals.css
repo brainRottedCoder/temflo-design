@@ -33,10 +33,69 @@
   --font-sans: var(--font-manrope);
   --font-header: var(--font-roboto);
   --font-chart: var(--font-marcellus);
+  --breakpoint-3xl: 2560px;
 }
 
 body {
   background: var(--bg-light);
   color: var(--foreground);
   font-family: var(--font-manrope), sans-serif;
+}
+
+/* Remove focus/click borders from ALL Recharts components */
+.recharts-wrapper,
+.recharts-surface,
+.recharts-wrapper svg,
+.recharts-responsive-container,
+.recharts-bar,
+.recharts-bar-rectangle,
+.recharts-rectangle,
+.recharts-cell,
+.recharts-xAxis,
+.recharts-yAxis,
+.recharts-cartesian-axis,
+.recharts-cartesian-axis-tick,
+.recharts-cartesian-axis-tick-value,
+.recharts-text,
+.recharts-label {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove focus on all states */
+.recharts-wrapper *,
+.recharts-wrapper *:focus,
+.recharts-wrapper *:focus-visible,
+.recharts-wrapper *:focus-within,
+.recharts-wrapper *:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove focus from SVG and all children */
+svg,
+svg *,
+svg:focus,
+svg:focus-visible,
+svg:active,
+svg *:focus,
+svg *:focus-visible,
+svg *:active,
+rect,
+rect:focus,
+rect:focus-visible,
+rect:active,
+text,
+text:focus,
+text:focus-visible,
+text:active,
+tspan,
+tspan:focus,
+tspan:focus-visible,
+tspan:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }

@@ -117,14 +117,14 @@ export default function Overview() {
 
         return (
             <div className="flex flex-col min-h-0 h-full">
-                <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <h2 className="text-2xl font-bold" style={{ color: '#303030' }}>
+                <div className="flex items-center gap-2 2xl:gap-3 mb-2 2xl:mb-3 flex-wrap">
+                    <h2 className="text-2xl 2xl:text-4xl font-bold" style={{ color: '#303030' }}>
                         {statisticsData.sectionTitle}
                     </h2>
                     {selectedStations.titles.map((title, index) => (
                         <span
                             key={index}
-                            className="px-2 py-0.5 rounded-full text-xs font-semibold"
+                            className="px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-full text-xs 2xl:text-sm font-semibold"
                             style={{
                                 backgroundColor: 'rgba(124, 58, 237, 0.15)',
                                 color: '#7C3AED'
@@ -134,7 +134,7 @@ export default function Overview() {
                         </span>
                     ))}
                 </div>
-                <div className="grid grid-rows-3 gap-2 flex-1 overflow-hidden">
+                <div className="grid grid-rows-3 gap-2 2xl:gap-3 flex-1 overflow-hidden border-none">
                     <StatisticsChart
                         title={statisticsData.charts.discharge.title}
                         data={statisticsData.charts.discharge.data}
@@ -166,11 +166,11 @@ export default function Overview() {
         <div className="h-screen flex flex-col" style={{ backgroundColor: '#f5f5f5' }}>
             <Header activeTab={activeTab} onTabChange={handleTabChange} />
 
-            <main className="flex-1 px-4 py-2 overflow-hidden">
-                <div className="h-full flex flex-col gap-2">
+            <main className="flex-1 px-4 2xl:px-6 py-2 2xl:py-3 overflow-hidden">
+                <div className="h-full flex flex-col gap-2 2xl:gap-3">
                     {/* Metrics Row */}
-                    <div className="flex gap-2">
-                        <div className="flex-1 grid grid-cols-5 gap-2">
+                    <div className="flex gap-2 2xl:gap-3">
+                        <div className="flex-1 grid grid-cols-5 gap-2 2xl:gap-3">
                             {metrics.map((metric) => (
                                 <MetricCard
                                     key={metric.id}
@@ -186,22 +186,22 @@ export default function Overview() {
                             className="rounded-xl px-5 py-3 min-w-[20%]"
                             style={{ backgroundColor: '#f7f7f7' }}
                         >
-                            <div className="text-base font-semibold mb-1" style={{ color: '#369fff' }}>
+                            <div className="text-xl font-semibold mb-1" style={{ color: '#369fff' }}>
                                 Last Updated
                             </div>
                             <div className="flex items-start gap-2">
                                 <Image
                                     src="/icons/calendar.svg"
                                     alt="Calendar"
-                                    width={18}
-                                    height={18}
-                                    className="mt-0.5"
+                                    width={26}
+                                    height={26}
+                                    className=""
                                 />
                                 <div>
-                                    <div className="text-base font-semibold" style={{ color: '#369fff' }}>
+                                    <div className="text-md font-bold" style={{ color: '#369fff' }}>
                                         {lastUpdated.date}
                                     </div>
-                                    <div className="text-base font-semibold" style={{ color: '#369fff' }}>
+                                    <div className="text-md font-bold px-3" style={{ color: '#369fff' }}>
                                         {lastUpdated.time}
                                     </div>
                                 </div>
@@ -210,12 +210,12 @@ export default function Overview() {
                     </div>
 
                     {/* Main Content Grid */}
-                    <div className="flex-1 grid grid-cols-[1fr_1px_1.1fr] gap-3 overflow-hidden min-h-0">
+                    <div className="flex-1 grid grid-cols-[1fr_1px_1.1fr] gap-3 2xl:gap-4 overflow-hidden min-h-0">
                         {/* Dynamic Content Area */}
                         {renderContent()}
 
                         {/* Divider */}
-                        <div className="bg-gray-200 my-2" />
+                        <div className="bg-gray-200 my-2 2xl:my-3" />
 
                         {/* Dynamic Statistics */}
                         {renderStatistics()}
@@ -226,7 +226,7 @@ export default function Overview() {
             {/* Auto-Loop Indicator for Large Screens */}
             {isLargeScreen && (
                 <div
-                    className="fixed bottom-4 right-4 px-4 py-2 rounded-xl shadow-lg flex items-center gap-3"
+                    className="fixed bottom-4 2xl:bottom-6 right-4 2xl:right-6 px-4 2xl:px-6 py-2 2xl:py-3 rounded-xl 2xl:rounded-2xl shadow-lg flex items-center gap-3 2xl:gap-4"
                     style={{
                         backgroundColor: isLooping ? 'rgba(124, 58, 237, 0.95)' : 'rgba(255, 255, 255, 0.95)',
                         color: isLooping ? '#ffffff' : '#374151',
@@ -234,23 +234,23 @@ export default function Overview() {
                 >
                     {isLooping ? (
                         <>
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
-                                <span className="font-semibold">Auto-Loop Active</span>
+                            <div className="flex items-center gap-2 2xl:gap-3">
+                                <div className="w-3 h-3 2xl:w-4 2xl:h-4 bg-white rounded-full animate-pulse" />
+                                <span className="font-semibold text-base 2xl:text-lg">Auto-Loop Active</span>
                             </div>
-                            <span className="text-sm opacity-90">
+                            <span className="text-sm 2xl:text-base opacity-90">
                                 Viewing: {TAB_LABELS[activeTab]}
                             </span>
                         </>
                     ) : (
                         <>
-                            <div className="flex items-center gap-2">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="flex items-center gap-2 2xl:gap-3">
+                                <svg className="w-5 h-5 2xl:w-7 2xl:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
-                                <span className="font-medium">55&quot; Display Mode</span>
+                                <span className="font-medium text-base 2xl:text-lg">55&quot; Display Mode</span>
                             </div>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm 2xl:text-base text-gray-500">
                                 Auto-loop in {Math.ceil(timeUntilLoop / 1000)}s
                             </span>
                         </>
