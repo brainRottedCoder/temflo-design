@@ -9,6 +9,7 @@ import DischargeStationsContent from '../components/content/DischargeStationsCon
 import AutomaticWeatherContent from '../components/content/AutomaticWeatherContent';
 import RainGaugeContent from '../components/content/RainGaugeContent';
 import WeatherStatistics from '../components/content/WeatherStatistics';
+import RainGaugeStatistics from '../components/content/RainGaugeStatistics';
 import { getDashboardData, getDischargeStatistics } from '../services/dataService';
 import { useAutoLoop } from '../hooks/useAutoLoop';
 
@@ -95,9 +96,17 @@ export default function Overview() {
     const renderContent = () => {
         switch (activeTab) {
             case 'weather':
-                return <AutomaticWeatherContent />;
+                return <AutomaticWeatherContent
+                    onStationSelect={handleStationSelect}
+                    selectedChartKeys={selectedStations.chartKeys}
+                    onClearAll={() => setSelectedStations({ chartKeys: [], titles: [] })}
+                />;
             case 'rain-gauge':
-                return <RainGaugeContent />;
+                return <RainGaugeContent
+                    onStationSelect={handleStationSelect}
+                    selectedChartKeys={selectedStations.chartKeys}
+                    onClearAll={() => setSelectedStations({ chartKeys: [], titles: [] })}
+                />;
             case 'discharge':
             case 'overview':
             default:
@@ -112,7 +121,17 @@ export default function Overview() {
     // Render statistics based on active tab
     const renderStatistics = () => {
         if (activeTab === 'weather') {
-            return <WeatherStatistics />;
+            return <WeatherStatistics
+                highlightedKeys={selectedStations.chartKeys}
+                selectedTitles={selectedStations.titles}
+            />;
+        }
+
+        if (activeTab === 'rain-gauge') {
+            return <RainGaugeStatistics
+                highlightedKeys={selectedStations.chartKeys}
+                selectedTitles={selectedStations.titles}
+            />;
         }
 
         return (

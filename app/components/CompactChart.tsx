@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface CompactChartProps {
     title: string;
@@ -9,6 +9,7 @@ interface CompactChartProps {
     data: { name: string; value: number }[];
     maxValue: number;
     pillColor?: string;
+    highlightedKeys?: string[];
 }
 
 const defaultPillColors: Record<string, string> = {
@@ -17,8 +18,10 @@ const defaultPillColors: Record<string, string> = {
     'Temperature': '#ff993a',
 };
 
-export default function CompactChart({ title, riverName, data, maxValue, pillColor }: CompactChartProps) {
+export default function CompactChart({ title, riverName, data, maxValue, pillColor, highlightedKeys = [] }: CompactChartProps) {
     const color = pillColor || defaultPillColors[title] || '#8ac53e';
+    const hasSelection = highlightedKeys.length > 0;
+    const safeId = `compact-${title.replace(/\s+/g, '')}-${riverName.replace(/\s+/g, '')}`;
 
     // Track window width for responsive chart sizing
     const [isLargeScreen, setIsLargeScreen] = useState(false);
@@ -42,15 +45,19 @@ export default function CompactChart({ title, riverName, data, maxValue, pillCol
                 >
                     {title}
                 </div>
-                <span className="text-sm 2xl:text-base text-gray-600 font-medium">{riverName}</span>
+                {riverName && <span className="text-sm 2xl:text-base text-gray-600 font-medium">{riverName}</span>}
             </div>
             <div className="flex-1 min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={data} margin={{ top: 3, right: 5, left: -15, bottom: 3 }}>
                         <defs>
-                            <linearGradient id="compactPurpleGradient" x1="0" y1="0" x2="0" y2="1">
+                            <linearGradient id={`purpleGradient-${safeId}`} x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="0%" stopColor="#7C3AED" />
                                 <stop offset="100%" stopColor="#6366F1" />
+                            </linearGradient>
+                            <linearGradient id={`dimmedGradient-${safeId}`} x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#D1D5DB" />
+                                <stop offset="100%" stopColor="#E5E7EB" />
                             </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="0" stroke="#E8E8E8" vertical={false} />
@@ -81,10 +88,20 @@ export default function CompactChart({ title, riverName, data, maxValue, pillCol
                         />
                         <Bar
                             dataKey="value"
-                            fill="url(#compactPurpleGradient)"
                             radius={[4, 4, 0, 0]}
                             barSize={isLargeScreen ? 18 : 14}
-                        />
+                        >
+                            {data.map((entry, index) => {
+                                const isHighlighted = !hasSelection || highlightedKeys.includes(entry.name);
+                                return (
+                                    <Cell
+                                        key={`cell-${index}`}
+                                        fill={isHighlighted ? `url(#purpleGradient-${safeId})` : `url(#dimmedGradient-${safeId})`}
+                                        opacity={isHighlighted ? 1 : 0.5}
+                                    />
+                                );
+                            })}
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
             </div>

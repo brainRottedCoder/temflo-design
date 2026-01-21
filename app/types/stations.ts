@@ -12,9 +12,13 @@ export interface DischargeStation {
     color: StationColor;
 }
 
+export type WeatherStationColor = 'blue' | 'green' | 'orange';
+
 export interface WeatherStation {
     id: string;
     title: string;
+    chartKey: string;
+    color: WeatherStationColor;
     windSpeed: string;
     windDirection: string;
     temperature: string;
@@ -34,4 +38,18 @@ export interface DischargeStationsData {
 export interface WeatherStationsData {
     sectionTitle: string;
     stations: WeatherStation[];
+}
+
+export interface RainGaugeStation {
+    id: string;
+    title: string;
+    chartKey: string;
+    color: StationColor;
+    rainfallHR: string;
+    rainfallTotal: string;
+}
+
+export interface RainGaugeStationsData {
+    sectionTitle: string;
+    stations: RainGaugeStation[];
 }

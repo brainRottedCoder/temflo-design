@@ -15,12 +15,15 @@ const labelColors: Record<string, string> = {
   'Discharge': '#8ac53e',
   'Velocity': '#ffd143',
   'Water Level': '#ff993a',
+  'Rainfall - HR (mm)': '#06B6D4',
+  'Rainfall - Total (mm)': '#8B5CF6',
 };
 
 export default function StatisticsChart({ title, data, maxValue, highlightedKeys = [] }: StatisticsChartProps) {
   const pillColor = labelColors[title] || '#8ac53e';
   const hasSelection = highlightedKeys.length > 0;
-  const safeId = title.replace(/\s+/g, '');
+  // Remove all non-alphanumeric characters for valid SVG gradient ID
+  const safeId = title.replace(/[^a-zA-Z0-9]/g, '');
 
   // Track window width for responsive chart sizing
   const [isLargeScreen, setIsLargeScreen] = useState(false);

@@ -3,7 +3,9 @@
     "stations": [
         {
             "id": "ws-001",
-            "title": "Syana Chatti Yamuna River",
+            "title": "Thatyur",
+            "chartKey": "Th",
+            "color": "blue",
             "windSpeed": "03",
             "windDirection": "03",
             "temperature": "03",
@@ -16,7 +18,9 @@
         },
         {
             "id": "ws-002",
-            "title": "Ganga Sangam River",
+            "title": "Kisala",
+            "chartKey": "Ki",
+            "color": "green",
             "windSpeed": "03",
             "windDirection": "03",
             "temperature": "03",
@@ -29,7 +33,9 @@
         },
         {
             "id": "ws-003",
-            "title": "Indus Kaveri River",
+            "title": "Lakhwar",
+            "chartKey": "La",
+            "color": "orange",
             "windSpeed": "03",
             "windDirection": "03",
             "temperature": "03",

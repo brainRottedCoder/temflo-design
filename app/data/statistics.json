@@ -120,149 +120,260 @@
     },
     "weather": {
         "sectionTitle": "Statistics",
-        "stations": [
-            {
-                "name": "",
-                "data": {
-                    "windSpeed": [
-                        {
-                            "name": "SC",
-                            "value": 320
-                        },
-                        {
-                            "name": "GS",
-                            "value": 380
-                        },
-                        {
-                            "name": "IK",
-                            "value": 350
-                        }
-                    ],
-                    "humidity": [
-                        {
-                            "name": "SC",
-                            "value": 450
-                        },
-                        {
-                            "name": "GS",
-                            "value": 420
-                        },
-                        {
-                            "name": "IK",
-                            "value": 400
-                        }
-                    ],
-                    "temperature": [
-                        {
-                            "name": "SC",
-                            "value": 280
-                        },
-                        {
-                            "name": "GS",
-                            "value": 420
-                        },
-                        {
-                            "name": "IK",
-                            "value": 350
-                        }
-                    ]
-                }
+        "charts": {
+            "windSpeed": {
+                "title": "Wind Speed",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 320
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 380
+                    },
+                    {
+                        "name": "La",
+                        "value": 350
+                    }
+                ],
+                "maxValue": 500
             },
-            {
-                "name": "",
-                "data": {
-                    "windSpeed": [
-                        {
-                            "name": "SC",
-                            "value": 390
-                        },
-                        {
-                            "name": "GS",
-                            "value": 420
-                        },
-                        {
-                            "name": "IK",
-                            "value": 380
-                        }
-                    ],
-                    "humidity": [
-                        {
-                            "name": "SC",
-                            "value": 400
-                        },
-                        {
-                            "name": "GS",
-                            "value": 480
-                        },
-                        {
-                            "name": "IK",
-                            "value": 440
-                        }
-                    ],
-                    "temperature": [
-                        {
-                            "name": "SC",
-                            "value": 300
-                        },
-                        {
-                            "name": "GS",
-                            "value": 450
-                        },
-                        {
-                            "name": "IK",
-                            "value": 380
-                        }
-                    ]
-                }
+            "windDirection": {
+                "title": "Wind Direction",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 280
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 310
+                    },
+                    {
+                        "name": "La",
+                        "value": 290
+                    }
+                ],
+                "maxValue": 500
             },
-            {
-                "name": "",
-                "data": {
-                    "windSpeed": [
-                        {
-                            "name": "SC",
-                            "value": 350
-                        },
-                        {
-                            "name": "GS",
-                            "value": 400
-                        },
-                        {
-                            "name": "IK",
-                            "value": 320
-                        }
-                    ],
-                    "humidity": [
-                        {
-                            "name": "SC",
-                            "value": 420
-                        },
-                        {
-                            "name": "GS",
-                            "value": 390
-                        },
-                        {
-                            "name": "IK",
-                            "value": 410
-                        }
-                    ],
-                    "temperature": [
-                        {
-                            "name": "SC",
-                            "value": 320
-                        },
-                        {
-                            "name": "GS",
-                            "value": 400
-                        },
-                        {
-                            "name": "IK",
-                            "value": 360
-                        }
-                    ]
-                }
+            "temperature": {
+                "title": "Temperature",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 420
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 380
+                    },
+                    {
+                        "name": "La",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 500
+            },
+            "relativeHumidity": {
+                "title": "Humidity",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 450
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 420
+                    },
+                    {
+                        "name": "La",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 500
+            },
+            "airPressure": {
+                "title": "Air Pressure",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 380
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 400
+                    },
+                    {
+                        "name": "La",
+                        "value": 360
+                    }
+                ],
+                "maxValue": 500
+            },
+            "solarRadiation": {
+                "title": "Solar Radiation",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 300
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 350
+                    },
+                    {
+                        "name": "La",
+                        "value": 320
+                    }
+                ],
+                "maxValue": 500
+            },
+            "rainfallHR": {
+                "title": "Rainfall HR",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 250
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 280
+                    },
+                    {
+                        "name": "La",
+                        "value": 260
+                    }
+                ],
+                "maxValue": 500
+            },
+            "rainfallDay": {
+                "title": "Rainfall Day",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 340
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 380
+                    },
+                    {
+                        "name": "La",
+                        "value": 350
+                    }
+                ],
+                "maxValue": 500
+            },
+            "rainfallTotal": {
+                "title": "Rainfall Total",
+                "data": [
+                    {
+                        "name": "Th",
+                        "value": 420
+                    },
+                    {
+                        "name": "Ki",
+                        "value": 450
+                    },
+                    {
+                        "name": "La",
+                        "value": 400
+                    }
+                ],
+                "maxValue": 500
             }
-        ],
+        },
         "maxValue": 500
+    },
+    "rainGauge": {
+        "sectionTitle": "Statistics",
+        "charts": {
+            "rainfallHR": {
+                "title": "Rainfall - HR (mm)",
+                "data": [
+                    {
+                        "name": "JD",
+                        "value": 120
+                    },
+                    {
+                        "name": "Su",
+                        "value": 80
+                    },
+                    {
+                        "name": "Sk",
+                        "value": 150
+                    },
+                    {
+                        "name": "Pu",
+                        "value": 60
+                    },
+                    {
+                        "name": "Dh",
+                        "value": 180
+                    },
+                    {
+                        "name": "Ja",
+                        "value": 100
+                    },
+                    {
+                        "name": "Na",
+                        "value": 140
+                    },
+                    {
+                        "name": "GG",
+                        "value": 90
+                    },
+                    {
+                        "name": "KM",
+                        "value": 110
+                    }
+                ],
+                "maxValue": 250
+            },
+            "rainfallTotal": {
+                "title": "Rainfall - Total (mm)",
+                "data": [
+                    {
+                        "name": "JD",
+                        "value": 156
+                    },
+                    {
+                        "name": "Su",
+                        "value": 142
+                    },
+                    {
+                        "name": "Sk",
+                        "value": 189
+                    },
+                    {
+                        "name": "Pu",
+                        "value": 122
+                    },
+                    {
+                        "name": "Dh",
+                        "value": 210
+                    },
+                    {
+                        "name": "Ja",
+                        "value": 165
+                    },
+                    {
+                        "name": "Na",
+                        "value": 178
+                    },
+                    {
+                        "name": "GG",
+                        "value": 134
+                    },
+                    {
+                        "name": "KM",
+                        "value": 148
+                    }
+                ],
+                "maxValue": 250
+            }
+        },
+        "maxValue": 250
     }
 }

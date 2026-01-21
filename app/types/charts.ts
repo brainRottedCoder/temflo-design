@@ -20,17 +20,39 @@ export interface StatisticsData {
     };
 }
 
-export interface WeatherMetricData {
-    windSpeed: ChartDataPoint[];
-    humidity: ChartDataPoint[];
-    temperature: ChartDataPoint[];
+export interface WeatherChartData {
+    title: string;
+    data: ChartDataPoint[];
+    maxValue: number;
 }
 
 export interface WeatherStatisticsData {
     sectionTitle: string;
-    stations: {
-        name: string;
-        data: WeatherMetricData;
-    }[];
+    charts: {
+        windSpeed: WeatherChartData;
+        windDirection: WeatherChartData;
+        temperature: WeatherChartData;
+        relativeHumidity: WeatherChartData;
+        airPressure: WeatherChartData;
+        solarRadiation: WeatherChartData;
+        rainfallHR: WeatherChartData;
+        rainfallDay: WeatherChartData;
+        rainfallTotal: WeatherChartData;
+    };
+    maxValue: number;
+}
+
+export interface RainGaugeChartData {
+    title: string;
+    data: ChartDataPoint[];
+    maxValue: number;
+}
+
+export interface RainGaugeStatisticsData {
+    sectionTitle: string;
+    charts: {
+        rainfallHR: RainGaugeChartData;
+        rainfallTotal: RainGaugeChartData;
+    };
     maxValue: number;
 }

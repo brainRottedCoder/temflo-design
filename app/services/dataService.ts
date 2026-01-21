@@ -17,14 +17,17 @@ import type {
     DashboardData,
     DischargeStationsData,
     WeatherStationsData,
+    RainGaugeStationsData,
     StatisticsData,
     WeatherStatisticsData,
+    RainGaugeStatisticsData,
 } from '../types';
 
 // Import JSON data
 import dashboardData from '../data/dashboard.json';
 import dischargeStationsData from '../data/dischargeStations.json';
 import weatherStationsData from '../data/weatherStations.json';
+import rainGaugeStationsData from '../data/rainGaugeStations.json';
 import statisticsData from '../data/statistics.json';
 
 /**
@@ -49,6 +52,13 @@ export function getWeatherStations(): WeatherStationsData {
 }
 
 /**
+ * Get all rain gauge stations data
+ */
+export function getRainGaugeStations(): RainGaugeStationsData {
+    return rainGaugeStationsData as RainGaugeStationsData;
+}
+
+/**
  * Get statistics data for discharge view
  */
 export function getDischargeStatistics(): StatisticsData {
@@ -60,4 +70,11 @@ export function getDischargeStatistics(): StatisticsData {
  */
 export function getWeatherStatistics(): WeatherStatisticsData {
     return statisticsData.weather as WeatherStatisticsData;
+}
+
+/**
+ * Get rain gauge statistics data
+ */
+export function getRainGaugeStatistics(): RainGaugeStatisticsData {
+    return statisticsData.rainGauge as RainGaugeStatisticsData;
 }

@@ -9,7 +9,28 @@ interface WeatherStationCardProps {
     rainfallHR: string;
     rainfallDay: string;
     rainfallTotal: string;
+    color?: 'blue' | 'green' | 'orange';
+    isSelected?: boolean;
+    onClick?: () => void;
 }
+
+const colorConfig = {
+    blue: {
+        bg: 'linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%)',
+        solid: '#3B82F6',
+        border: '#1D4ED8',
+    },
+    green: {
+        bg: 'linear-gradient(135deg, #A3E635 0%, #84CC16 100%)',
+        solid: '#84CC16',
+        border: '#4D7C0F',
+    },
+    orange: {
+        bg: 'linear-gradient(135deg, #FB923C 0%, #F97316 100%)',
+        solid: '#F97316',
+        border: '#C2410C',
+    },
+};
 
 export default function WeatherStationCard({
     title,
@@ -22,23 +43,35 @@ export default function WeatherStationCard({
     rainfallHR = '03',
     rainfallDay = '03',
     rainfallTotal = '03',
+    color = 'blue',
+    isSelected = false,
+    onClick,
 }: WeatherStationCardProps) {
+    const config = colorConfig[color];
+
     return (
         <div
-            className="rounded-[12px] 2xl:rounded-[18px] px-3 2xl:px-4 py-2 2xl:py-3 h-full flex flex-col"
+            className={`rounded-[12px] 2xl:rounded-[18px] px-3 2xl:px-4 py-2 2xl:py-3 h-full flex flex-col transition-all cursor-pointer ${isSelected ? 'scale-[1.01]' : 'hover:scale-[1.005]'}`}
             style={{
-                backgroundColor: '#3b82f6',
-                boxShadow: '0 6px 16px rgba(59,130,246,0.3)',
-                borderLeft: '5px solid #1d4ed8'
+                background: config.bg,
+                boxShadow: isSelected
+                    ? `0 8px 20px ${config.solid}50`
+                    : `0 4px 12px ${config.solid}30`,
+                border: isSelected ? `3px solid ${config.border}` : '3px solid transparent',
             }}
+            onClick={onClick}
         >
-            <h3 className="text-lg 2xl:text-2xl font-bold mb-2 2xl:mb-3 text-white">{title}</h3>
+            <div className="flex items-center gap-2 mb-2 2xl:mb-3">
+                <h3 className="text-base 2xl:text-xl px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-md 2xl:rounded-lg font-bold text-black bg-white">
+                    {title}
+                </h3>
+            </div>
 
             <div className="grid grid-cols-3 gap-x-4 2xl:gap-x-6 gap-y-1 2xl:gap-y-2 flex-1 content-center">
                 {/* Column 1 */}
                 <div className="flex flex-col gap-1 2xl:gap-2">
                     <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Wind Speed (m3/s)</span>
+                        <span className="text-xs 2xl:text-sm text-white/85">Wind Speed (m/s)</span>
                         <span className="text-2xl 2xl:text-4xl font-bold text-white">{windSpeed}</span>
                     </div>
                     <div className="flex items-baseline gap-2 2xl:gap-3">
