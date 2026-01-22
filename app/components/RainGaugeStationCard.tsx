@@ -54,22 +54,30 @@ export default function RainGaugeStationCard({
             onClick={onClick}
         >
             {/* Title */}
-            <h3 className="text-base 2xl:text-xl font-bold leading-tight mb-1 2xl:mb-2">{title}</h3>
+            <div className="flex items-center gap-2 mb-2 2xl:mb-3 text-black bg-white justify-center align-center">
+                <h3 className="text-base 2xl:text-xl px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-md 2xl:rounded-lg font-bold ">
+                    {title}
+                </h3>
+            </div>
 
-            {/* Labels Row */}
-            <div className="grid grid-cols-2 gap-1 2xl:gap-2 text-center flex-1">
+            {/* Rainfall Sub-heading */}
+            <div className="text-center mb-1">
+                <span className="text-lg 2xl:text-base font-semibold opacity-95">Rainfall</span>
+                <span className="text-xs 2xl:text-sm font-medium opacity-80 ml-1">(mm)</span>
+            </div>
+
+            {/* Sub-sub headings Row */}
+            <div className="grid grid-cols-2 gap-1 2xl:gap-2 text-center">
                 <div className="flex flex-col justify-center">
-                    <span className="text-md 2xl:text-lg font-semibold opacity-95">Rainfall - HR</span>
-                    <span className="text-xs 2xl:text-sm font-medium opacity-80">(mm)</span>
+                    <span className="text-sm 2xl:text-sm font-semibold opacity-90">HR</span>
                 </div>
                 <div className="flex flex-col justify-center">
-                    <span className="text-md 2xl:text-lg font-semibold opacity-95">Rainfall - Total</span>
-                    <span className="text-xs 2xl:text-sm font-medium opacity-80">(mm)</span>
+                    <span className="text-sm 2xl:text-sm font-semibold opacity-90">Total</span>
                 </div>
             </div>
 
             {/* Values Row */}
-            <div className="grid grid-cols-2 gap-1 2xl:gap-2 text-center mt-auto">
+            <div className="grid grid-cols-2 gap-1 2xl:gap-2 text-center mt-auto flex-1 items-center">
                 <div className="text-2xl 2xl:text-4xl font-bold leading-none">{rainfallHR}</div>
                 <div className="text-2xl 2xl:text-4xl font-bold leading-none">{rainfallTotal}</div>
             </div>

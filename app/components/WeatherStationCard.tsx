@@ -61,8 +61,8 @@ export default function WeatherStationCard({
             }}
             onClick={onClick}
         >
-            <div className="flex items-center gap-2 mb-2 2xl:mb-3">
-                <h3 className="text-base 2xl:text-xl px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-md 2xl:rounded-lg font-bold text-black bg-white">
+            <div className="flex items-center gap-2 mb-2 2xl:mb-3 text-black bg-white justify-center align-center">
+                <h3 className="text-base 2xl:text-xl px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-md 2xl:rounded-lg font-bold ">
                     {title}
                 </h3>
             </div>
