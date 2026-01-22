@@ -277,19 +277,15 @@ export default function Overview() {
                         </div>
                         {/* Last Updated Card */}
                         <div
-                            className="rounded-xl 2xl:rounded-2xl px-3 2xl:px-4 py-1.5 2xl:py-2 flex flex-col justify-center items-center shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
-                            style={{
-                                backgroundColor: '#FFFFFF',
-                                border: '1px solid #E5E7EB',
-                                minWidth: '100px'
-                            }}
+                            className="rounded-xl px-5 py-3 min-w-[20%] flex flex-col justify-center items-center text-center"
+                            style={{ backgroundColor: '#f7f7f7' }}
                         >
-                            <span className="text-[10px] 2xl:text-xs font-semibold text-gray-500 mb-0.5">
+                            <span className="text-md 2xl:text-xs font-semibold text-gray-500 mb-0.5">
                                 Last Updated:
                             </span>
                             <div className="flex items-center gap-1 2xl:gap-1.5">
-                                <Image src="/calendar.svg" alt="calendar" width={14} height={14} className="2xl:w-[18px] 2xl:h-[18px]" />
-                                <span className={`text-[11px] 2xl:text-sm font-semibold ${isLoading ? 'animate-pulse' : ''}`} style={{ color: '#4B5563' }}>
+                                <Image src="/calendar.svg" alt="calendar" width={14} height={14} className="2xl:w-md 2xl:h-md" />
+                                <span className={`text-md 2xl:text-sm font-semibold ${isLoading ? 'animate-pulse' : ''}`} style={{ color: '#4B5563' }}>
                                     {lastUpdated.date}
                                 </span>
                             </div>
