@@ -1,21 +1,19 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Header, { type TabType } from '../components/Header';
 import MetricCard from '../components/MetricCard';
 import StatisticsChart from '../components/StatisticsChart';
+import SkeletonCard from '../components/SkeletonCard';
+import SkeletonChart from '../components/SkeletonChart';
 import DischargeStationsContent from '../components/content/DischargeStationsContent';
 import AutomaticWeatherContent from '../components/content/AutomaticWeatherContent';
 import RainGaugeContent from '../components/content/RainGaugeContent';
 import WeatherStatistics from '../components/content/WeatherStatistics';
 import RainGaugeStatistics from '../components/content/RainGaugeStatistics';
-import { getDashboardData, getDischargeStatistics } from '../services/dataService';
+import { fetchAllDashboardData, type AllDashboardData } from '../services/dataService';
 import { useAutoLoop } from '../hooks/useAutoLoop';
-
-// Get data from the data service
-const dashboardData = getDashboardData();
-const statisticsData = getDischargeStatistics();
 
 // Tab configuration for auto-loop (only loops through main content tabs)
 const LOOP_TABS: TabType[] = ['discharge', 'weather', 'rain-gauge'];
@@ -32,13 +30,40 @@ export default function Overview() {
         chartKeys: [],
         titles: []
     });
+    const [isLoading, setIsLoading] = useState(true);
+    const [isTabLoading, setIsTabLoading] = useState(false);
+    const [data, setData] = useState<AllDashboardData | null>(null);
 
-    // Handle tab change with callback
-    const handleTabChange = useCallback((tab: TabType | string) => {
-        setActiveTab(tab as TabType);
-        // Reset station selection when changing tabs
-        setSelectedStations({ chartKeys: [], titles: [] });
+    // Fetch all data on mount
+    useEffect(() => {
+        const loadData = async () => {
+            setIsLoading(true);
+            try {
+                const allData = await fetchAllDashboardData();
+                setData(allData);
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadData();
     }, []);
+
+    // Handle tab change with callback - now includes loading state
+    const handleTabChange = useCallback((tab: TabType | string) => {
+        const newTab = tab as TabType;
+        if (newTab !== activeTab) {
+            setActiveTab(newTab);
+            // Reset station selection when changing tabs
+            setSelectedStations({ chartKeys: [], titles: [] });
+            // Trigger loading for tab content
+            setIsTabLoading(true);
+            setTimeout(() => {
+                setIsTabLoading(false);
+            }, 2000);
+        }
+    }, [activeTab]);
 
     // Auto-loop hook for large screens
     const { isLooping, isLargeScreen, timeUntilLoop } = useAutoLoop({
@@ -94,6 +119,25 @@ export default function Overview() {
 
     // Render content based on active tab
     const renderContent = () => {
+        const showLoading = isLoading || isTabLoading;
+        if (showLoading) {
+            const cardType = activeTab === 'weather' ? 'weather' : activeTab === 'rain-gauge' ? 'rain-gauge' : 'discharge';
+            const cardCount = activeTab === 'weather' ? 3 : activeTab === 'rain-gauge' ? 9 : 8;
+            const cols = activeTab === 'rain-gauge' ? 3 : 2;
+
+            return (
+                <div className="flex flex-col min-h-0 h-full overflow-hidden">
+                    <div className="h-6 2xl:h-8 w-48 bg-gray-300 rounded mb-2 2xl:mb-3 animate-pulse" />
+                    <div className={`grid grid-cols-${cols} gap-1.5 2xl:gap-2 flex-1 overflow-hidden`}
+                        style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+                        {Array.from({ length: cardCount }).map((_, i) => (
+                            <SkeletonCard key={i} type={cardType} />
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
         switch (activeTab) {
             case 'weather':
                 return <AutomaticWeatherContent
@@ -120,6 +164,29 @@ export default function Overview() {
 
     // Render statistics based on active tab
     const renderStatistics = () => {
+        const showLoading = isLoading || isTabLoading;
+        if (showLoading) {
+            const chartCount = activeTab === 'weather' ? 9 : activeTab === 'rain-gauge' ? 2 : 3;
+            const cols = activeTab === 'weather' ? 3 : 1;
+
+            return (
+                <div className="flex flex-col min-h-0 h-full">
+                    <div className="h-6 2xl:h-8 w-32 bg-gray-300 rounded mb-2 2xl:mb-3 animate-pulse" />
+                    <div className={`grid gap-2 2xl:gap-3 flex-1 overflow-hidden`}
+                        style={{
+                            gridTemplateColumns: `repeat(${cols}, 1fr)`,
+                            gridTemplateRows: `repeat(${Math.ceil(chartCount / cols)}, 1fr)`
+                        }}>
+                        {Array.from({ length: chartCount }).map((_, i) => (
+                            <SkeletonChart key={i} compact={activeTab === 'weather'} />
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        if (!data) return null;
+
         if (activeTab === 'weather') {
             return <WeatherStatistics
                 highlightedKeys={selectedStations.chartKeys}
@@ -133,6 +200,8 @@ export default function Overview() {
                 selectedTitles={selectedStations.titles}
             />;
         }
+
+        const statisticsData = data.dischargeStatistics;
 
         return (
             <div className="flex flex-col min-h-0 h-full">
@@ -177,9 +246,15 @@ export default function Overview() {
         );
     };
 
-    // Get metrics from data
-    const metrics = dashboardData.metrics;
-    const lastUpdated = dashboardData.lastUpdated;
+    // Get metrics from data or use loading placeholders
+    const metrics = data?.dashboard.metrics ?? [
+        { id: 'discharge', title: 'Discharge Stations', value: '--', clickable: true },
+        { id: 'weather', title: 'Automatic Weather Stations', value: '--', clickable: true },
+        { id: 'rain-gauge', title: 'Rain Gauge Stations', value: '--', clickable: true },
+        { id: 'juddo-pond', title: 'Juddo Pond Level', value: '--', clickable: false },
+        { id: 'juddo-forebay', title: 'Juddo Forebay Level', value: '--', clickable: false },
+    ];
+    const lastUpdated = data?.dashboard.lastUpdated ?? { date: '--', time: '--' };
 
     return (
         <div className="h-screen flex flex-col" style={{ backgroundColor: '#f5f5f5' }}>
@@ -194,83 +269,72 @@ export default function Overview() {
                                 <MetricCard
                                     key={metric.id}
                                     title={metric.title}
-                                    value={metric.value}
+                                    value={isLoading ? '--' : metric.value}
                                     isActive={activeMetric === metric.id}
                                     onClick={metric.clickable ? () => handleTabChange(metric.id as TabType) : undefined}
                                 />
                             ))}
                         </div>
-
+                        {/* Last Updated Card */}
                         <div
-                            className="rounded-xl px-5 py-3 min-w-[20%]"
-                            style={{ backgroundColor: '#f7f7f7' }}
+                            className="rounded-xl 2xl:rounded-2xl px-3 2xl:px-4 py-1.5 2xl:py-2 flex flex-col justify-center items-center shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+                            style={{
+                                backgroundColor: '#FFFFFF',
+                                border: '1px solid #E5E7EB',
+                                minWidth: '100px'
+                            }}
                         >
-                            <div className="text-xl font-semibold mb-1" style={{ color: '#369fff' }}>
-                                Last Updated
+                            <span className="text-[10px] 2xl:text-xs font-semibold text-gray-500 mb-0.5">
+                                Last Updated:
+                            </span>
+                            <div className="flex items-center gap-1 2xl:gap-1.5">
+                                <Image src="/calendar.svg" alt="calendar" width={14} height={14} className="2xl:w-[18px] 2xl:h-[18px]" />
+                                <span className={`text-[11px] 2xl:text-sm font-semibold ${isLoading ? 'animate-pulse' : ''}`} style={{ color: '#4B5563' }}>
+                                    {lastUpdated.date}
+                                </span>
                             </div>
-                            <div className="flex items-start gap-2">
-                                <Image
-                                    src="/icons/calendar.svg"
-                                    alt="Calendar"
-                                    width={26}
-                                    height={26}
-                                    className=""
-                                />
-                                <div>
-                                    <div className="text-md font-bold" style={{ color: '#369fff' }}>
-                                        {lastUpdated.date}
-                                    </div>
-                                    <div className="text-md font-bold px-3" style={{ color: '#369fff' }}>
-                                        {lastUpdated.time}
-                                    </div>
-                                </div>
-                            </div>
+                            <span className={`text-xs 2xl:text-base font-bold ${isLoading ? 'animate-pulse' : ''}`} style={{ color: '#6366F1' }}>
+                                {lastUpdated.time}
+                            </span>
                         </div>
                     </div>
 
-                    {/* Main Content Grid */}
-                    <div className="flex-1 grid grid-cols-[1fr_1px_1.1fr] gap-3 2xl:gap-4 overflow-hidden min-h-0">
-                        {/* Dynamic Content Area */}
-                        {renderContent()}
+                    {/* Main Content Area */}
+                    <div className="flex-1 grid grid-cols-2 gap-3 2xl:gap-4 overflow-hidden">
+                        {/* Left Panel - Station Cards */}
+                        <div
+                            className="rounded-xl 2xl:rounded-2xl p-3 2xl:p-4 overflow-hidden flex flex-col"
+                            style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)' }}
+                        >
+                            {renderContent()}
+                        </div>
 
-                        {/* Divider */}
-                        <div className="bg-gray-200 my-2 2xl:my-3" />
-
-                        {/* Dynamic Statistics */}
-                        {renderStatistics()}
+                        {/* Right Panel - Statistics */}
+                        <div
+                            className="rounded-xl 2xl:rounded-2xl p-3 2xl:p-4 overflow-hidden flex flex-col"
+                            style={{ backgroundColor: '#FFFFFF', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)' }}
+                        >
+                            {renderStatistics()}
+                        </div>
                     </div>
                 </div>
             </main>
 
-            {/* Auto-Loop Indicator for Large Screens */}
+            {/* Auto-loop indicator for large screens */}
             {isLargeScreen && (
-                <div
-                    className="fixed bottom-4 2xl:bottom-6 right-4 2xl:right-6 px-4 2xl:px-6 py-2 2xl:py-3 rounded-xl 2xl:rounded-2xl shadow-lg flex items-center gap-3 2xl:gap-4"
-                    style={{
-                        backgroundColor: isLooping ? 'rgba(124, 58, 237, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-                        color: isLooping ? '#ffffff' : '#374151',
-                    }}
-                >
+                <div className="fixed bottom-4 left-4 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-lg border border-gray-200">
                     {isLooping ? (
                         <>
-                            <div className="flex items-center gap-2 2xl:gap-3">
-                                <div className="w-3 h-3 2xl:w-4 2xl:h-4 bg-white rounded-full animate-pulse" />
-                                <span className="font-semibold text-base 2xl:text-lg">Auto-Loop Active</span>
-                            </div>
-                            <span className="text-sm 2xl:text-base opacity-90">
-                                Viewing: {TAB_LABELS[activeTab]}
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-xs font-medium text-gray-600">
+                                Auto-cycling: {TAB_LABELS[activeTab]}
                             </span>
                         </>
                     ) : (
                         <>
-                            <div className="flex items-center gap-2 2xl:gap-3">
-                                <svg className="w-5 h-5 2xl:w-7 2xl:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                <span className="font-medium text-base 2xl:text-lg">55&quot; Display Mode</span>
-                            </div>
-                            <span className="text-sm 2xl:text-base text-gray-500">
-                                Auto-loop in {Math.ceil(timeUntilLoop / 1000)}s
+                            <div className="w-2 h-2 rounded-full bg-amber-500" />
+                            <span className="text-xs font-medium text-gray-600">
+                                Auto-cycle in {Math.ceil(timeUntilLoop / 1000)}s
                             </span>
                         </>
                     )}
