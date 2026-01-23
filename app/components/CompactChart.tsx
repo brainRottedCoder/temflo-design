@@ -52,7 +52,7 @@ export default function CompactChart({
     }, []);
 
     return (
-        <div className={`bg-white rounded-lg 2xl:rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] 2xl:p-3 h-full flex flex-col transition-all ${isDimmed ? 'opacity-40' : ''} ${isSelected ? 'ring-2 ring-purple-500 ring-offset-1' : ''}`}>
+        <div className={`bg-white rounded-lg 2xl:rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] 2xl:p-3 h-full flex flex-col transition-all ${isDimmed ? 'opacity-40' : ''} ${isSelected ? 'border-2 border-purple-500' : 'border-2 border-transparent'}`}>
             <div className="flex items-center gap-2 2xl:gap-3 mb-1 2xl:mb-2">
                 <div
                     className={` inline-block px-2.5 2xl:px-3.5 py-0.5 2xl:py-1 rounded 2xl:rounded-md text-xs 2xl:text-sm font-semibold text-white transition-all ${onTitleClick ? 'cursor-pointer hover:scale-105 hover:shadow-md' : ''} ${isSelected ? 'ring-2 ring-white ring-offset-1 ring-offset-purple-500' : ''}`}
@@ -63,9 +63,9 @@ export default function CompactChart({
                 </div>
                 {riverName && <span className="text-sm 2xl:text-base text-gray-600 font-medium">{riverName}</span>}
             </div>
-            <div className="flex-1 min-h-0 m-1 ">
+            <div className="flex-1 min-h-0 ">
                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data} margin={{ top: 3, right: 5, left: -10, bottom: 3 }}>
+                    <BarChart data={data} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
                         <defs>
                             <linearGradient id={`purpleGradient-${safeId}`} x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="0%" stopColor="#7C3AED" />
@@ -87,17 +87,17 @@ export default function CompactChart({
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#6B7280', fontSize: isLargeScreen ? 12 : 9 }}
+                            tick={{ fill: '#6B7280', fontSize: isLargeScreen ? 11 : 8 }}
                             domain={[0, 'auto']}
-                            tickCount={4}
+                            tickCount={3}
                             tickFormatter={(value) => `${value}`}
-                            width={isLargeScreen ? 35 : 28}
+                            width={isLargeScreen ? 55 : 45}
                             label={unit ? {
                                 value: unit,
                                 angle: -90,
                                 position: 'insideLeft',
                                 style: { fontSize: isLargeScreen ? 10 : 8, fill: '#9CA3AF' },
-                                offset: 10
+                                offset: 8
                             } : undefined}
                         />
                         <Tooltip

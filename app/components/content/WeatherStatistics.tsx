@@ -79,7 +79,7 @@ export default function WeatherStatistics({
                     );
                 })}
             </div>
-            <div className="grid grid-cols-3 grid-rows-3 grid-flow-col gap-1.5 2xl:gap-2 flex-1 overflow-hidden">
+            <div className="grid grid-cols-3 grid-rows-3 grid-flow-col gap-2 2xl:gap-2 flex-1 overflow-hidden ">
                 {chartConfigs.map((config) => {
                     const chartData = weatherStats.charts[config.key as keyof typeof weatherStats.charts];
                     const isSelected = selectedParameters.includes(config.key);
@@ -87,6 +87,7 @@ export default function WeatherStatistics({
 
                     return (
                         <CompactChart
+
                             key={config.key}
                             title={config.title}
                             unit={config.unit}

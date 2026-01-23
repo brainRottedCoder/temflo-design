@@ -63,16 +63,16 @@ export default function RainGaugeStationCard({
             {/* Rainfall Sub-heading */}
             <div className="text-center mb-1">
                 <span className="text-lg 2xl:text-base font-semibold opacity-95">Rainfall</span>
-                <span className="text-xs 2xl:text-sm font-medium opacity-80 ml-1">(mm)</span>
+                <span className="text-sm 2xl:text-sm font-medium opacity-80 ml-1">(mm)</span>
             </div>
 
             {/* Sub-sub headings Row */}
             <div className="grid grid-cols-2 gap-1 2xl:gap-2 text-center">
                 <div className="flex flex-col justify-center">
-                    <span className="text-sm 2xl:text-sm font-semibold opacity-90">HR</span>
+                    <span className="text-md    2xl:text-sm font-semibold opacity-90">HR</span>
                 </div>
                 <div className="flex flex-col justify-center">
-                    <span className="text-sm 2xl:text-sm font-semibold opacity-90">Total</span>
+                    <span className="text-md 2xl:text-sm font-semibold opacity-90">Total</span>
                 </div>
             </div>
 

@@ -183,9 +183,9 @@ export default function Overview() {
             const cols = activeTab === 'weather' ? 3 : 1;
 
             return (
-                <div className="flex flex-col min-h-0 h-full">
+                <div className="flex flex-col min-h-0 h-full ">
                     <div className="h-6 2xl:h-8 w-32 bg-gray-300 rounded mb-2 2xl:mb-3 animate-pulse" />
-                    <div className={`grid gap-2 2xl:gap-3 flex-1 overflow-hidden`}
+                    <div className={`grid gap-2 2xl:gap-3 flex-1 `}
                         style={{
                             gridTemplateColumns: `repeat(${cols}, 1fr)`,
                             gridTemplateRows: `repeat(${Math.ceil(chartCount / cols)}, 1fr)`

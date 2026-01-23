@@ -111,7 +111,7 @@ export default function StatisticsChart({ title, unit, data, maxValue, highlight
             <Bar
               dataKey="value"
               radius={[4, 4, 0, 0]}
-              barSize={isLargeScreen ? 16 : 12}
+              barSize={isLargeScreen ? 16 : 15}
             >
               {data.map((entry, index) => {
                 const isHighlighted = !hasSelection || highlightedKeys.includes(entry.name);
