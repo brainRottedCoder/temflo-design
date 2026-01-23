@@ -5,11 +5,15 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 
 interface CompactChartProps {
     title: string;
+    unit?: string;
     riverName: string;
     data: { name: string; value: number }[];
     maxValue: number;
     pillColor?: string;
     highlightedKeys?: string[];
+    isSelected?: boolean;
+    isDimmed?: boolean;
+    onTitleClick?: () => void;
 }
 
 const defaultPillColors: Record<string, string> = {
@@ -18,7 +22,18 @@ const defaultPillColors: Record<string, string> = {
     'Temperature': '#ff993a',
 };
 
-export default function CompactChart({ title, riverName, data, maxValue, pillColor, highlightedKeys = [] }: CompactChartProps) {
+export default function CompactChart({
+    title,
+    unit,
+    riverName,
+    data,
+    maxValue,
+    pillColor,
+    highlightedKeys = [],
+    isSelected = false,
+    isDimmed = false,
+    onTitleClick
+}: CompactChartProps) {
     const color = pillColor || defaultPillColors[title] || '#8ac53e';
     const hasSelection = highlightedKeys.length > 0;
     const safeId = `compact-${title.replace(/\s+/g, '')}-${riverName.replace(/\s+/g, '')}`;
@@ -37,19 +52,20 @@ export default function CompactChart({ title, riverName, data, maxValue, pillCol
     }, []);
 
     return (
-        <div className="bg-white rounded-lg 2xl:rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] p-2 2xl:p-3 h-full flex flex-col">
+        <div className={`bg-white rounded-lg 2xl:rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] 2xl:p-3 h-full flex flex-col transition-all ${isDimmed ? 'opacity-40' : ''} ${isSelected ? 'ring-2 ring-purple-500 ring-offset-1' : ''}`}>
             <div className="flex items-center gap-2 2xl:gap-3 mb-1 2xl:mb-2">
                 <div
-                    className="inline-block px-2.5 2xl:px-3.5 py-0.5 2xl:py-1 rounded 2xl:rounded-md text-xs 2xl:text-sm font-semibold text-white"
+                    className={` inline-block px-2.5 2xl:px-3.5 py-0.5 2xl:py-1 rounded 2xl:rounded-md text-xs 2xl:text-sm font-semibold text-white transition-all ${onTitleClick ? 'cursor-pointer hover:scale-105 hover:shadow-md' : ''} ${isSelected ? 'ring-2 ring-white ring-offset-1 ring-offset-purple-500' : ''}`}
                     style={{ backgroundColor: color }}
+                    onClick={onTitleClick}
                 >
-                    {title}
+                    {title}{unit && <span className="ml-1 opacity-80">({unit})</span>}
                 </div>
                 {riverName && <span className="text-sm 2xl:text-base text-gray-600 font-medium">{riverName}</span>}
             </div>
-            <div className="flex-1 min-h-0">
+            <div className="flex-1 min-h-0 m-1 ">
                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data} margin={{ top: 3, right: 5, left: -15, bottom: 3 }}>
+                    <BarChart data={data} margin={{ top: 3, right: 5, left: -10, bottom: 3 }}>
                         <defs>
                             <linearGradient id={`purpleGradient-${safeId}`} x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="0%" stopColor="#7C3AED" />
@@ -65,16 +81,24 @@ export default function CompactChart({ title, riverName, data, maxValue, pillCol
                             dataKey="name"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#369fff', fontSize: isLargeScreen ? 16 : 12, fontWeight: 600 }}
+                            tick={{ fill: '#369fff', fontSize: isLargeScreen ? 14 : 10, fontWeight: 600 }}
+                            interval={0}
                         />
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#6B7280', fontSize: isLargeScreen ? 14 : 11 }}
-                            domain={[0, maxValue]}
-                            ticks={[200, 400]}
+                            tick={{ fill: '#6B7280', fontSize: isLargeScreen ? 12 : 9 }}
+                            domain={[0, 'auto']}
+                            tickCount={4}
                             tickFormatter={(value) => `${value}`}
-                            width={isLargeScreen ? 40 : 30}
+                            width={isLargeScreen ? 35 : 28}
+                            label={unit ? {
+                                value: unit,
+                                angle: -90,
+                                position: 'insideLeft',
+                                style: { fontSize: isLargeScreen ? 10 : 8, fill: '#9CA3AF' },
+                                offset: 10
+                            } : undefined}
                         />
                         <Tooltip
                             contentStyle={{
@@ -84,12 +108,12 @@ export default function CompactChart({ title, riverName, data, maxValue, pillCol
                                 fontSize: isLargeScreen ? '14px' : '11px',
                                 padding: isLargeScreen ? '8px 12px' : '6px 10px'
                             }}
-                            formatter={(value) => [`${value}`, title]}
+                            formatter={(value) => [`${value}${unit ? ` ${unit}` : ''}`, title]}
                         />
                         <Bar
                             dataKey="value"
                             radius={[4, 4, 0, 0]}
-                            barSize={isLargeScreen ? 18 : 14}
+                            barSize={isLargeScreen ? 20 : 16}
                         >
                             {data.map((entry, index) => {
                                 const isHighlighted = !hasSelection || highlightedKeys.includes(entry.name);

@@ -30,6 +30,7 @@ export default function Overview() {
         chartKeys: [],
         titles: []
     });
+    const [selectedParameters, setSelectedParameters] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isTabLoading, setIsTabLoading] = useState(false);
     const [data, setData] = useState<AllDashboardData | null>(null);
@@ -55,8 +56,9 @@ export default function Overview() {
         const newTab = tab as TabType;
         if (newTab !== activeTab) {
             setActiveTab(newTab);
-            // Reset station selection when changing tabs
+            // Reset station and parameter selection when changing tabs
             setSelectedStations({ chartKeys: [], titles: [] });
+            setSelectedParameters([]);
             // Trigger loading for tab content
             setIsTabLoading(true);
             setTimeout(() => {
@@ -143,7 +145,18 @@ export default function Overview() {
                 return <AutomaticWeatherContent
                     onStationSelect={handleStationSelect}
                     selectedChartKeys={selectedStations.chartKeys}
-                    onClearAll={() => setSelectedStations({ chartKeys: [], titles: [] })}
+                    onClearAll={() => {
+                        setSelectedStations({ chartKeys: [], titles: [] });
+                        setSelectedParameters([]);
+                    }}
+                    selectedParameters={selectedParameters}
+                    onParameterSelect={(paramKey) => {
+                        setSelectedParameters(prev =>
+                            prev.includes(paramKey)
+                                ? prev.filter(k => k !== paramKey)
+                                : [...prev, paramKey]
+                        );
+                    }}
                 />;
             case 'rain-gauge':
                 return <RainGaugeContent
@@ -191,6 +204,7 @@ export default function Overview() {
             return <WeatherStatistics
                 highlightedKeys={selectedStations.chartKeys}
                 selectedTitles={selectedStations.titles}
+                selectedParameters={selectedParameters}
             />;
         }
 
@@ -277,10 +291,10 @@ export default function Overview() {
                         </div>
                         {/* Last Updated Card */}
                         <div
-                            className="rounded-xl px-5 py-3 min-w-[20%] flex flex-col justify-center items-center text-center"
+                            className="rounded-xl px-5 py-2 min-w-[20%] flex flex-col justify-center items-center text-center"
                             style={{ backgroundColor: '#f7f7f7' }}
                         >
-                            <span className="text-md 2xl:text-md font-semibold text-gray-500 mb-0.5">
+                            <span className="text-md 2xl:text-lg font-semibold text-gray-500 mb-0.5">
                                 Last Updated:
                             </span>
                             <div className="flex items-center gap-1 2xl:gap-1.5">
@@ -289,7 +303,7 @@ export default function Overview() {
                                     {lastUpdated.date}
                                 </span>
                             </div>
-                            <span className={`text-xs 2xl:text-base font-bold ${isLoading ? 'animate-pulse' : ''}`} style={{ color: '#6366F1' }}>
+                            <span className={`text-md 2xl:text-lg font-bold ${isLoading ? 'animate-pulse' : ''}`} style={{ color: '#6366F1' }}>
                                 {lastUpdated.time}
                             </span>
                         </div>

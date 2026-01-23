@@ -4,7 +4,7 @@
         {
             "id": "ws-001",
             "title": "Thatyur",
-            "chartKey": "Th",
+            "chartKey": "Thatyur",
             "color": "blue",
             "windSpeed": "03",
             "windDirection": "03",
@@ -19,7 +19,7 @@
         {
             "id": "ws-002",
             "title": "Kisala",
-            "chartKey": "Ki",
+            "chartKey": "Kisala",
             "color": "green",
             "windSpeed": "03",
             "windDirection": "03",
@@ -34,7 +34,7 @@
         {
             "id": "ws-003",
             "title": "Lakhwar",
-            "chartKey": "La",
+            "chartKey": "Lakhwar",
             "color": "orange",
             "windSpeed": "03",
             "windDirection": "03",

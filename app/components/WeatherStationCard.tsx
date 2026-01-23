@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 interface WeatherStationCardProps {
     title: string;
     windSpeed: string;
@@ -11,7 +15,9 @@ interface WeatherStationCardProps {
     rainfallTotal: string;
     color?: 'blue' | 'green' | 'orange';
     isSelected?: boolean;
+    selectedParameters?: string[];
     onClick?: () => void;
+    onParameterSelect?: (paramKey: string) => void;
 }
 
 const colorConfig = {
@@ -32,6 +38,19 @@ const colorConfig = {
     },
 };
 
+// Parameter configuration for clickable labels
+const parameterConfig = [
+    { key: 'windSpeed', label: 'Wind Speed', unit: '(m/s)' },
+    { key: 'windDirection', label: 'Wind Direction', unit: '(N)' },
+    { key: 'temperature', label: 'Temperature', unit: '(C)' },
+    { key: 'relativeHumidity', label: 'Relative Humidity', unit: '(%RH)' },
+    { key: 'airPressure', label: 'Air Pressure', unit: '(hPa)' },
+    { key: 'solarRadiation', label: 'Solar Radiation', unit: '(nm)' },
+    { key: 'rainfallHR', label: 'Rainfall - HR', unit: '(mm)' },
+    { key: 'rainfallDay', label: 'Rainfall - Day', unit: '(mm)' },
+    { key: 'rainfallTotal', label: 'Rainfall - Total', unit: '(mm)' },
+];
+
 export default function WeatherStationCard({
     title,
     windSpeed = '03',
@@ -45,13 +64,51 @@ export default function WeatherStationCard({
     rainfallTotal = '03',
     color = 'blue',
     isSelected = false,
+    selectedParameters = [],
     onClick,
+    onParameterSelect,
 }: WeatherStationCardProps) {
     const config = colorConfig[color];
 
+    const values: Record<string, string> = {
+        windSpeed,
+        windDirection,
+        temperature,
+        relativeHumidity,
+        airPressure,
+        solarRadiation,
+        rainfallHR,
+        rainfallDay,
+        rainfallTotal,
+    };
+
+    const handleParameterClick = (e: React.MouseEvent, paramKey: string) => {
+        e.stopPropagation(); // Prevent card click
+        onParameterSelect?.(paramKey);
+    };
+
+    const renderParameter = (paramKey: string, label: string, unit: string) => {
+        const isParamSelected = selectedParameters.includes(paramKey);
+        const hasAnySelected = selectedParameters.length > 0;
+        const isDimmed = hasAnySelected && !isParamSelected;
+
+        return (
+            <div
+                className={`flex items-baseline gap-2 2xl:gap-3 cursor-pointer transition-all rounded-md px-1 -mx-1 ${isParamSelected
+                        ? 'bg-white/20 ring-1 ring-white/50'
+                        : 'hover:bg-white/10'
+                    } ${isDimmed ? 'opacity-40' : ''}`}
+                onClick={(e) => handleParameterClick(e, paramKey)}
+            >
+                <span className="text-sm 2xl:text-sm text-white/85">{label} {unit}</span>
+                <span className="text-2xl 2xl:text-4xl font-bold text-white">{values[paramKey]}</span>
+            </div>
+        );
+    };
+
     return (
         <div
-            className={`rounded-[12px] 2xl:rounded-[18px] px-3 2xl:px-4 py-2 2xl:py-3 h-full flex flex-col transition-all cursor-pointer ${isSelected ? 'scale-[1.01]' : 'hover:scale-[1.005]'}`}
+            className={`rounded-[12px] 2xl:rounded-[18px] px-3 2xl:px-4 py-2 mx-3 2xl:py-3 h-full flex flex-col transition-all cursor-pointer ${isSelected ? 'scale-[1.01]' : 'hover:scale-[1.005]'}`}
             style={{
                 background: config.bg,
                 boxShadow: isSelected
@@ -70,50 +127,23 @@ export default function WeatherStationCard({
             <div className="grid grid-cols-3 gap-x-4 2xl:gap-x-6 gap-y-1 2xl:gap-y-2 flex-1 content-center">
                 {/* Column 1 */}
                 <div className="flex flex-col gap-1 2xl:gap-2">
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Wind Speed (m/s)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{windSpeed}</span>
-                    </div>
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Wind Direction (N)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{windDirection}</span>
-                    </div>
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Temperature (C)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{temperature}</span>
-                    </div>
+                    {renderParameter('windSpeed', 'Wind Speed', '(m/s)')}
+                    {renderParameter('windDirection', 'Wind Direction', '(N)')}
+                    {renderParameter('temperature', 'Temperature', '(C)')}
                 </div>
 
                 {/* Column 2 */}
                 <div className="flex flex-col gap-1 2xl:gap-2">
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Relative Humidity (%RH)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{relativeHumidity}</span>
-                    </div>
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Air Pressure (hPa)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{airPressure}</span>
-                    </div>
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Solar Radiation (nm)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{solarRadiation}</span>
-                    </div>
+                    {renderParameter('relativeHumidity', 'Relative Humidity', '(%RH)')}
+                    {renderParameter('airPressure', 'Air Pressure', '(hPa)')}
+                    {renderParameter('solarRadiation', 'Solar Radiation', '(nm)')}
                 </div>
 
                 {/* Column 3 */}
                 <div className="flex flex-col gap-1 2xl:gap-2">
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Rainfall - HR (mm)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{rainfallHR}</span>
-                    </div>
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Rainfall - Day (mm)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{rainfallDay}</span>
-                    </div>
-                    <div className="flex items-baseline gap-2 2xl:gap-3">
-                        <span className="text-xs 2xl:text-sm text-white/85">Rainfall - Total (mm)</span>
-                        <span className="text-2xl 2xl:text-4xl font-bold text-white">{rainfallTotal}</span>
-                    </div>
+                    {renderParameter('rainfallHR', 'Rainfall - HR', '(mm)')}
+                    {renderParameter('rainfallDay', 'Rainfall - Day', '(mm)')}
+                    {renderParameter('rainfallTotal', 'Rainfall - Total', '(mm)')}
                 </div>
             </div>
         </div>

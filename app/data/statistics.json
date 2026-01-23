@@ -7,7 +7,7 @@
                 "data": [
                     {
                         "name": "SCYR",
-                        "value": 450
+                        "value": 290
                     },
                     {
                         "name": "GR",
@@ -125,15 +125,15 @@
                 "title": "Wind Speed",
                 "data": [
                     {
-                        "name": "Th",
-                        "value": 320
+                        "name": "Thatyur",
+                        "value": 1000
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 380
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 350
                     }
                 ],
@@ -143,15 +143,15 @@
                 "title": "Wind Direction",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 280
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 310
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 290
                     }
                 ],
@@ -161,15 +161,15 @@
                 "title": "Temperature",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 420
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 380
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 400
                     }
                 ],
@@ -179,15 +179,15 @@
                 "title": "Humidity",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 450
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 420
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 400
                     }
                 ],
@@ -197,15 +197,15 @@
                 "title": "Air Pressure",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 380
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 400
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 360
                     }
                 ],
@@ -215,15 +215,15 @@
                 "title": "Solar Radiation",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 300
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 350
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 320
                     }
                 ],
@@ -233,15 +233,15 @@
                 "title": "Rainfall HR",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 250
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 280
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 260
                     }
                 ],
@@ -251,15 +251,15 @@
                 "title": "Rainfall Day",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 340
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 380
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 350
                     }
                 ],
@@ -269,15 +269,15 @@
                 "title": "Rainfall Total",
                 "data": [
                     {
-                        "name": "Th",
+                        "name": "Thatyur",
                         "value": 420
                     },
                     {
-                        "name": "Ki",
+                        "name": "Kisara",
                         "value": 450
                     },
                     {
-                        "name": "La",
+                        "name": "Lakhwar",
                         "value": 400
                     }
                 ],

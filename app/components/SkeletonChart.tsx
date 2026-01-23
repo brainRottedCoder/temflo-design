@@ -2,8 +2,13 @@ interface SkeletonChartProps {
     compact?: boolean;
 }
 
+// Fixed heights to avoid hydration mismatch (Math.random() causes server/client differences)
+const fixedHeights = [65, 45, 55, 70, 40, 60, 75, 50];
+const compactHeights = [60, 45, 70];
+
 export default function SkeletonChart({ compact = false }: SkeletonChartProps) {
     const barCount = compact ? 3 : 8;
+    const heights = compact ? compactHeights : fixedHeights;
 
     return (
         <div className={`bg-white rounded-lg 2xl:rounded-xl shadow-[0_2px_24px_rgba(0,0,0,0.05)] ${compact ? 'p-2 2xl:p-3' : 'p-3 2xl:p-4'} h-full flex flex-col animate-pulse`}>
@@ -17,11 +22,11 @@ export default function SkeletonChart({ compact = false }: SkeletonChartProps) {
                         key={i}
                         className="flex flex-col items-center gap-1 flex-1"
                     >
-                        {/* Bar skeleton with varying heights */}
+                        {/* Bar skeleton with fixed heights */}
                         <div
-                            className={`w-full max-w-[${compact ? '8px' : '14px'}] bg-gray-300 rounded-t`}
+                            className="w-full bg-gray-300 rounded-t"
                             style={{
-                                height: `${30 + Math.random() * 50}%`,
+                                height: `${heights[i % heights.length]}%`,
                                 maxWidth: compact ? '8px' : '14px'
                             }}
                         />

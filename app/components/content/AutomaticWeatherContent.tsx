@@ -11,12 +11,16 @@ interface AutomaticWeatherContentProps {
     onStationSelect?: (chartKey: string | null, title: string | null) => void;
     selectedChartKeys?: string[];
     onClearAll?: () => void;
+    onParameterSelect?: (paramKey: string) => void;
+    selectedParameters?: string[];
 }
 
 export default function AutomaticWeatherContent({
     onStationSelect,
     selectedChartKeys = [],
-    onClearAll
+    onClearAll,
+    onParameterSelect,
+    selectedParameters = [],
 }: AutomaticWeatherContentProps) {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
@@ -44,13 +48,19 @@ export default function AutomaticWeatherContent({
         onClearAll?.();
     };
 
+    const handleParameterSelect = (paramKey: string) => {
+        onParameterSelect?.(paramKey);
+    };
+
+    const hasSelections = selectedIds.length > 0 || selectedParameters.length > 0;
+
     return (
         <div className="flex flex-col min-h-0 h-full overflow-hidden">
             <div className="flex items-center justify-between mb-1.5 2xl:mb-2 flex-shrink-0">
                 <h2 className="text-xl 2xl:text-2xl font-bold" style={{ color: '#303030' }}>
                     {weatherData.sectionTitle}
                 </h2>
-                {selectedIds.length > 0 && (
+                {hasSelections && (
                     <button
                         onClick={handleClearAll}
                         className="px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-full text-xs 2xl:text-sm font-semibold transition-colors hover:bg-red-100"
@@ -80,7 +90,9 @@ export default function AutomaticWeatherContent({
                         rainfallTotal={station.rainfallTotal}
                         color={station.color as 'blue' | 'green' | 'orange'}
                         isSelected={selectedIds.includes(station.id)}
+                        selectedParameters={selectedParameters}
                         onClick={() => handleCardClick(station.id, station.chartKey, station.title)}
+                        onParameterSelect={handleParameterSelect}
                     />
                 ))}
             </div>

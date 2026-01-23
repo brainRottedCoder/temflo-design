@@ -65,7 +65,7 @@ export default function StationCard({
       <div className="grid grid-cols-3 gap-1 2xl:gap-2 text-center flex-1">
         <div className="flex flex-col justify-center">
           <span className="text-md 2xl:text-lg font-semibold opacity-95">Discharge</span>
-          <span className="text-xs 2xl:text-sm font-medium opacity-80">(m3/s)</span>
+          <span className="text-xs 2xl:text-sm font-medium opacity-80">(m<sup>3</sup>/s)</span>
         </div>
         <div className="flex flex-col justify-center">
           <span className="text-md 2xl:text-lg font-semibold opacity-95">Velocity</span>
