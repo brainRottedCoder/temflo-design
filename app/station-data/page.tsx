@@ -1,59 +1,76 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ReportCard from '../components/ReportCard';
+import {
+    ReportType,
+    TimeTab,
+    getStationsByType,
+    getColumnsByType,
+    generateStationData,
+    getReportTypeName,
+    TableColumn,
+    TableRow
+} from '../services/stationDataGenerator';
 
-// Extended sample data for the table
-const generateSampleData = () => {
-    const data = [];
-    const baseDate = new Date('2026-01-13');
-
-    for (let i = 0; i < 25; i++) {
-        const startDate = new Date(baseDate.getTime() + i * 60000);
-        const endDate = new Date(startDate.getTime() + 7000);
-
-        data.push({
-            id: i,
-            startTime: startDate.toLocaleString('en-US', {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            }),
-            endTime: endDate.toLocaleString('en-US', {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-            }),
-            userCall: 0,
-            recordCall: 'Recorded by Time',
-            humidity: (39 + Math.random() * 2).toFixed(2),
-            pressure: (868 + Math.random() * 2).toFixed(2),
-            rainfallDay: 0,
-            rainfallHr: 0,
-            rainfallTotal: (78 + Math.random() * 1).toFixed(2),
-            rainfallTotal2: (156 + Math.random() * 2).toFixed(2)
-        });
-    }
-    return data;
-};
-
-const tabs = ['Minute', 'Hour', 'Day', 'Week', 'Month', 'Year', 'All'];
+const tabs: TimeTab[] = ['Minute', 'Hour', 'Day', 'Week', 'Month', 'Year', 'All'];
 
 export default function StationDataPage() {
-    const [activeTab, setActiveTab] = useState('Minute');
-    const [selectedRow, setSelectedRow] = useState<number | null>(0);
-    const [sampleData] = useState(generateSampleData());
+    // Active report type and station selections
+    const [activeReportType, setActiveReportType] = useState<ReportType>('aws');
+    const [selectedStations, setSelectedStations] = useState<Record<ReportType, string>>({
+        'discharge': 'ds-001',
+        'aws': 'ws-001',
+        'rain-gauge': 'rg-001'
+    });
 
-    const handleGenerateReport = (type: string, startTime: string, endTime: string) => {
+    // Table state
+    const [activeTab, setActiveTab] = useState<TimeTab>('Minute');
+    const [selectedRow, setSelectedRow] = useState<number | null>(0);
+    const [tableData, setTableData] = useState<TableRow[]>([]);
+    const [columns, setColumns] = useState<TableColumn[]>([]);
+
+    // Get stations for each report type
+    const dischargeStations = getStationsByType('discharge');
+    const awsStations = getStationsByType('aws');
+    const rainGaugeStations = getStationsByType('rain-gauge');
+
+    // Get current station name
+    const getCurrentStationName = () => {
+        const stations = getStationsByType(activeReportType);
+        const station = stations.find(s => s.id === selectedStations[activeReportType]);
+        return station?.title || 'Unknown Station';
+    };
+
+    // Update data when selections change
+    useEffect(() => {
+        const stationId = selectedStations[activeReportType];
+        const stations = getStationsByType(activeReportType);
+        const station = stations.find(s => s.id === stationId);
+
+        if (station) {
+            const newColumns = getColumnsByType(activeReportType, station.title);
+            const newData = generateStationData(activeReportType, stationId, activeTab);
+            setColumns(newColumns);
+            setTableData(newData);
+            setSelectedRow(0);
+        }
+    }, [activeReportType, selectedStations, activeTab]);
+
+    // Handle station change
+    const handleStationChange = (type: ReportType, stationId: string) => {
+        setSelectedStations(prev => ({
+            ...prev,
+            [type]: stationId
+        }));
+        // Switch to this report type when station is changed
+        setActiveReportType(type);
+    };
+
+    // Handle generate report
+    const handleGenerateReport = (type: ReportType, startTime: string, endTime: string) => {
+        setActiveReportType(type);
         console.log(`Generating ${type} report from ${startTime} to ${endTime}`);
     };
 
@@ -65,10 +82,10 @@ export default function StationDataPage() {
                 <div className="px-6 py-3 flex items-center justify-between flex-shrink-0" style={{ backgroundColor: '#6b6b6b' }}>
                     <div className="flex-1 text-center">
                         <h1 className="text-2xl font-bold text-black leading-tight">
-                            Lakhwar Sub-Station
+                            {getCurrentStationName()}
                         </h1>
                         <h2 className="text-2xl font-bold text-black">
-                            Reports
+                            {getReportTypeName(activeReportType)} Reports
                         </h2>
                     </div>
                     <div className="bg-white rounded-lg p-2 flex items-center justify-center" style={{ width: '60px', height: '60px' }}>
@@ -81,7 +98,7 @@ export default function StationDataPage() {
                     <span>Start Time: 1/13/2026 12:00:00 AM</span>
                     <span>End Time: 1/14/2026 12:00:00 PM</span>
                     <span>Data Logger: data_logger</span>
-                    <span>Start Logger: aws_REPORT</span>
+                    <span>Report Type: {getReportTypeName(activeReportType)}</span>
                 </div>
 
                 {/* Content Grid */}
@@ -109,22 +126,19 @@ export default function StationDataPage() {
                             <table className="w-full text-xs border-collapse">
                                 <thead style={{ backgroundColor: '#2d2d2d', position: 'sticky', top: 0, zIndex: 10 }}>
                                     <tr>
-                                        <th className="px-1 overflow-hidden text-left font-semibold text-white border-r" style={{ borderColor: '#444' }}>Utc TimeCol</th>
-                                        <th className="px-1 overflow-hidden text-left font-semibold text-white border-r" style={{ borderColor: '#444' }}>Timestamp</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>MillisecondsCol</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>UserCol</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>ReasonCol</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>Thatyur_Humidity</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>Thatyur_Pressure</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>Thatyur_Rainfall_Day</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>Thatyur_Rainfall_H...</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>Thatyur_Rainfall_to...</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white border-r" style={{ borderColor: '#444' }}>Thatyur_Solar_Radi...</th>
-                                        <th className="px-1 overflow-hidden text-center font-semibold text-white" style={{ borderColor: '#444' }}>Thatyur_Tempe...</th>
+                                        {columns.map((col, idx) => (
+                                            <th
+                                                key={col.key}
+                                                className={`px-1 overflow-hidden font-semibold text-white border-r text-${col.align}`}
+                                                style={{ borderColor: '#444' }}
+                                            >
+                                                {col.label.length > 18 ? col.label.substring(0, 15) + '...' : col.label}
+                                            </th>
+                                        ))}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {sampleData.map((row, index) => (
+                                    {tableData.map((row, index) => (
                                         <tr
                                             key={row.id}
                                             onClick={() => setSelectedRow(index)}
@@ -134,18 +148,15 @@ export default function StationDataPage() {
                                                 color: selectedRow === index ? 'white' : '#ccc'
                                             }}
                                         >
-                                            <td className="px-1 overflow-hidden border-r" style={{ borderColor: '#444' }}>{row.startTime}</td>
-                                            <td className="px-1 overflow-hidden border-r" style={{ borderColor: '#444' }}>{row.endTime}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.userCall}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.userCall}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.recordCall}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.humidity}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.pressure}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.rainfallDay}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.rainfallHr}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.rainfallTotal}</td>
-                                            <td className="px-1 overflow-hidden text-center border-r" style={{ borderColor: '#444' }}>{row.rainfallTotal2}</td>
-                                            <td className="px-1 overflow-hidden text-center" style={{ borderColor: '#444' }}>{row.humidity}</td>
+                                            {columns.map((col) => (
+                                                <td
+                                                    key={col.key}
+                                                    className={`px-1 overflow-hidden border-r text-${col.align}`}
+                                                    style={{ borderColor: '#444' }}
+                                                >
+                                                    {row[col.key]}
+                                                </td>
+                                            ))}
                                         </tr>
                                     ))}
                                 </tbody>
@@ -168,19 +179,31 @@ export default function StationDataPage() {
                         <div className="flex-1">
                             <ReportCard
                                 title="Discharge Reports"
-                                onGenerate={(start, end) => handleGenerateReport('Discharge', start, end)}
+                                stations={dischargeStations}
+                                selectedStation={selectedStations['discharge']}
+                                onStationChange={(id) => handleStationChange('discharge', id)}
+                                onGenerate={(start, end) => handleGenerateReport('discharge', start, end)}
+                                isActive={activeReportType === 'discharge'}
                             />
                         </div>
                         <div className="flex-1">
                             <ReportCard
                                 title="AWS Reports"
-                                onGenerate={(start, end) => handleGenerateReport('AWS', start, end)}
+                                stations={awsStations}
+                                selectedStation={selectedStations['aws']}
+                                onStationChange={(id) => handleStationChange('aws', id)}
+                                onGenerate={(start, end) => handleGenerateReport('aws', start, end)}
+                                isActive={activeReportType === 'aws'}
                             />
                         </div>
                         <div className="flex-1">
                             <ReportCard
                                 title="Rain Gauge Reports"
-                                onGenerate={(start, end) => handleGenerateReport('Rain Gauge', start, end)}
+                                stations={rainGaugeStations}
+                                selectedStation={selectedStations['rain-gauge']}
+                                onStationChange={(id) => handleStationChange('rain-gauge', id)}
+                                onGenerate={(start, end) => handleGenerateReport('rain-gauge', start, end)}
+                                isActive={activeReportType === 'rain-gauge'}
                             />
                         </div>
                     </div>

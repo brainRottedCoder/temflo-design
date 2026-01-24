@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ReportCardProps {
     title: string;
+    stations: { id: string; title: string }[];
+    selectedStation: string;
+    onStationChange: (stationId: string) => void;
     onGenerate?: (startTime: string, endTime: string) => void;
+    isActive?: boolean;
 }
 
-export default function ReportCard({ title, onGenerate }: ReportCardProps) {
+export default function ReportCard({
+    title,
+    stations,
+    selectedStation,
+    onStationChange,
+    onGenerate,
+    isActive = false
+}: ReportCardProps) {
     const [startTime, setStartTime] = useState('13/01/2026 02:02:54');
     const [endTime, setEndTime] = useState('13/01/2026 02:02:54');
 
@@ -16,14 +27,40 @@ export default function ReportCard({ title, onGenerate }: ReportCardProps) {
     };
 
     return (
-        <div className="rounded-lg overflow-hidden border-2 h-full flex flex-col" style={{ backgroundColor: '#b8b8b8', borderColor: '#888' }}>
+        <div
+            className="rounded-lg overflow-hidden border-2 h-full flex flex-col transition-all"
+            style={{
+                backgroundColor: isActive ? '#9a9a9a' : '#b8b8b8',
+                borderColor: isActive ? '#2d7a2d' : '#888',
+                borderWidth: isActive ? '3px' : '2px'
+            }}
+        >
             {/* Title Header */}
-            <div className="text-center py-2 px-4 flex-shrink-0" style={{ backgroundColor: '#a0a0a0' }}>
+            <div
+                className="text-center py-2 px-4 flex-shrink-0"
+                style={{ backgroundColor: isActive ? '#707070' : '#a0a0a0' }}
+            >
                 <h3 className="text-lg font-bold text-white">{title}</h3>
             </div>
 
             {/* Content */}
             <div className="p-3 space-y-2 flex-1 flex flex-col justify-center">
+                {/* Station Selector */}
+                <div className="mb-1">
+
+                    <select
+                        value={selectedStation}
+                        onChange={(e) => onStationChange(e.target.value)}
+                        className="w-full px-2 py-1.5 bg-black text-white text-center text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-green-600 cursor-pointer"
+                    >
+                        {stations.map((station) => (
+                            <option key={station.id} value={station.id}>
+                                {station.title}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 {/* Time Inputs Row */}
                 <div className="grid grid-cols-2 gap-2">
                     {/* Starting Time */}
