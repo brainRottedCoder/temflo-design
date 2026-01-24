@@ -108,8 +108,8 @@ export default function WeatherStationCard({
                     } ${isDimmed ? 'opacity-40' : ''}`}
                 onClick={(e) => handleParameterClick(e, paramKey)}
             >
-                <span className="text-sm 2xl:text-sm text-white/85">{label} {unit}</span>
-                <span className="text-2xl 2xl:text-4xl font-bold text-white">{values[paramKey]}</span>
+                <span className="text-md 2xl:text-lg text-white/85">{label} {unit}</span>
+                <span className="text-xl 2xl:text-3xl font-bold text-white">{values[paramKey]}</span>
             </div>
         );
     };

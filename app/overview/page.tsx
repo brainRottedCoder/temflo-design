@@ -303,9 +303,12 @@ export default function Overview() {
                                     {lastUpdated.date}
                                 </span>
                             </div>
-                            <span className={`text-md 2xl:text-lg font-bold ${isLoading ? 'animate-pulse' : ''}`} style={{ color: '#6366F1' }}>
-                                {lastUpdated.time}
-                            </span>
+                            <div className="flex items-center gap-1 2xl:gap-1.5">
+                                <Image src="/clock.svg" alt="time" width={18} height={18} className="2xl:w-[22px] 2xl:h-[22px]" />
+                                <span className={`text-md 2xl:text-lg font-semibold ${isLoading ? 'animate-pulse' : ''}`}>
+                                    {lastUpdated.time}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
