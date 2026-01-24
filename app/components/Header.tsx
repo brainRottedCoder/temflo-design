@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export type TabType = 'overview' | 'discharge' | 'weather' | 'rain-gauge';
 
@@ -15,6 +18,18 @@ interface HeaderProps {
 }
 
 export default function Header({ activeTab = 'overview', onTabChange }: HeaderProps) {
+  const router = useRouter();
+
+  const handleTabClick = (tab: TabType) => {
+    // Navigate to station-data for all tabs except overview
+    if (tab !== 'overview') {
+      router.push('/station-data');
+    } else {
+      // For overview, use the normal tab change handler
+      onTabChange?.(tab);
+    }
+  };
+
   return (
     <header style={{ backgroundColor: '#f5f5f5' }}>
       <div className="flex items-center justify-between px-6 2xl:px-8 py-2 2xl:py-3">
@@ -33,10 +48,10 @@ export default function Header({ activeTab = 'overview', onTabChange }: HeaderPr
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => onTabChange?.(tab.id)}
-              className={`px-6 2xl:px-8 py-2.5 2xl:py-3.5 text-sm 2xl:text-lg cursor-pointer font-medium font-semibold rounded-md 2xl:rounded-lg border-2 2xl:border-3 transition-all ${activeTab === tab.id
-                ? 'bg-white text-blue-500 border-blue-500'
-                : 'bg-white text-gray-400 border-gray-200 hover:border-gray-300 hover:text-gray-500'
+              onClick={() => handleTabClick(tab.id)}
+              className={`px-6 2xl:px-8 py-2.5 2xl:py-3.5 text-sm 2xl:text-lg cursor-pointer font-medium font-semibold rounded-md 2xl:rounded-lg border-2 2xl:border-3 transition-all ${activeTab === tab.id && tab.id == 'overview'
+                ? 'bg-white'
+                : 'bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500'
                 }`}
             >
               {tab.label}
