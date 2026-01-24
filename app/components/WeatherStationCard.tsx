@@ -102,13 +102,13 @@ export default function WeatherStationCard({
 
         return (
             <div
-                className={`flex items-baseline gap-2 2xl:gap-3 cursor-pointer transition-all rounded-md px-1 -mx-1 ${isParamSelected
+                className={`flex items-baseline gap-2 2xl:gap-3 cursor-pointer transition-all rounded-md px-1 -mx-2 ${isParamSelected
                     ? 'bg-white/20 ring-1 ring-white/50'
                     : isSelected ? 'hover:bg-white/10' : ''
                     } ${isDimmed ? 'opacity-40' : ''}`}
                 onClick={(e) => handleParameterClick(e, paramKey)}
             >
-                <span className="text-md 2xl:text-lg text-white/85">{label} {unit}</span>
+                <span className="text-md font-semibold 2xl:text-lg text-white">{label} {unit}</span>
                 <span className="text-xl 2xl:text-3xl font-bold text-white">{values[paramKey]}</span>
             </div>
         );
