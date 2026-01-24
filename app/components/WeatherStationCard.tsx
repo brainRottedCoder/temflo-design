@@ -84,19 +84,27 @@ export default function WeatherStationCard({
 
     const handleParameterClick = (e: React.MouseEvent, paramKey: string) => {
         e.stopPropagation(); // Prevent card click
-        onParameterSelect?.(paramKey);
+        // Only allow parameter selection if this card is selected or no cards are selected
+        if (isSelected || !hasStationsSelected) {
+            onParameterSelect?.(paramKey);
+        }
     };
 
+    // Check if any stations are selected (from parent)
+    const hasStationsSelected = isSelected; // This card knows if it's selected
+
     const renderParameter = (paramKey: string, label: string, unit: string) => {
-        const isParamSelected = selectedParameters.includes(paramKey);
-        const hasAnySelected = selectedParameters.length > 0;
-        const isDimmed = hasAnySelected && !isParamSelected;
+        // Only show parameter highlighting if this card is selected
+        const shouldShowParameterSelection = isSelected;
+        const isParamSelected = shouldShowParameterSelection && selectedParameters.includes(paramKey);
+        const hasAnyParamSelected = shouldShowParameterSelection && selectedParameters.length > 0;
+        const isDimmed = hasAnyParamSelected && !isParamSelected;
 
         return (
             <div
                 className={`flex items-baseline gap-2 2xl:gap-3 cursor-pointer transition-all rounded-md px-1 -mx-1 ${isParamSelected
-                        ? 'bg-white/20 ring-1 ring-white/50'
-                        : 'hover:bg-white/10'
+                    ? 'bg-white/20 ring-1 ring-white/50'
+                    : isSelected ? 'hover:bg-white/10' : ''
                     } ${isDimmed ? 'opacity-40' : ''}`}
                 onClick={(e) => handleParameterClick(e, paramKey)}
             >
@@ -118,13 +126,15 @@ export default function WeatherStationCard({
             }}
             onClick={onClick}
         >
-            <div className="flex items-center gap-2 mb-2 2xl:mb-3 text-black bg-white justify-center align-center">
-                <h3 className="text-base 2xl:text-xl px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-md 2xl:rounded-lg font-bold ">
+            <div className="flex items-center justify-center mb-1 2xl:mb-3 border-1 border-white bg-white rounded-lg ">
+                <h3
+                    className="text-base 2xl:text-xl px-4 2xl:px-5 py-1 2xl:py-1.5 rounded-lg 2xl:rounded-xl font-bold text-gray-800 "
+                >
                     {title}
                 </h3>
             </div>
 
-            <div className="grid grid-cols-3 gap-x-4 2xl:gap-x-6 gap-y-1 2xl:gap-y-2 flex-1 content-center">
+            <div className="grid grid-cols-3 gap-x-1 2xl:gap-x-4 gap-y-1 2xl:gap-y-2 flex-1 content-center">
                 {/* Column 1 */}
                 <div className="flex flex-col gap-1 2xl:gap-2">
                     {renderParameter('windSpeed', 'Wind Speed', '(m/s)')}

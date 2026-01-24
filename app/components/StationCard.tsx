@@ -57,8 +57,12 @@ export default function StationCard({
       onClick={onClick}
     >
       {/* Title */}
-      <div className="flex items-center gap-2 mb-2 2xl:mb-3 text-black bg-white justify-center align-center">
-        <h3 className="text-base 2xl:text-xl px-2 2xl:px-3 py-0.5 2xl:py-1 rounded-md 2xl:rounded-lg font-bold ">{title}</h3>
+      <div className="flex items-center justify-center mb-2 border-2 border-white bg-white rounded-lg 2xl:mb-3 ">
+        <h3
+          className="text-base 2xl:text-xl px-4 2xl:px-5 py-1 2xl:py-1.5 rounded-lg 2xl:rounded-xl font-bold text-gray-800 "
+        >
+          {title}
+        </h3>
       </div>
 
       {/* Labels Row */}
