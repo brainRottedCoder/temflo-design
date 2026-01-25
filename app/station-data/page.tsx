@@ -16,6 +16,19 @@ import {
 
 const tabs: TimeTab[] = ['Minute', 'Hour', 'Day', 'Week', 'Month', 'Year', 'All'];
 
+// Format date for display
+function formatDateForDisplay(date: Date): string {
+    return date.toLocaleString('en-US', {
+        month: 'numeric',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+    });
+}
+
 export default function StationDataPage() {
     // Active report type and station selections
     const [activeReportType, setActiveReportType] = useState<ReportType>('aws');
@@ -23,6 +36,13 @@ export default function StationDataPage() {
         'discharge': 'ds-001',
         'aws': 'ws-001',
         'rain-gauge': 'rg-001'
+    });
+
+    // Time range state
+    const [timeRange, setTimeRange] = useState<{ start: Date; end: Date }>(() => {
+        const end = new Date();
+        const start = new Date(end.getTime() - 3600000); // 1 hour ago
+        return { start, end };
     });
 
     // Table state
@@ -51,12 +71,18 @@ export default function StationDataPage() {
 
         if (station) {
             const newColumns = getColumnsByType(activeReportType, station.title);
-            const newData = generateStationData(activeReportType, stationId, activeTab);
+            const newData = generateStationData(
+                activeReportType,
+                stationId,
+                activeTab,
+                timeRange.start,
+                timeRange.end
+            );
             setColumns(newColumns);
             setTableData(newData);
             setSelectedRow(0);
         }
-    }, [activeReportType, selectedStations, activeTab]);
+    }, [activeReportType, selectedStations, activeTab, timeRange]);
 
     // Handle station change
     const handleStationChange = (type: ReportType, stationId: string) => {
@@ -69,9 +95,10 @@ export default function StationDataPage() {
     };
 
     // Handle generate report
-    const handleGenerateReport = (type: ReportType, startTime: string, endTime: string) => {
+    const handleGenerateReport = (type: ReportType, startTime: Date, endTime: Date) => {
         setActiveReportType(type);
-        console.log(`Generating ${type} report from ${startTime} to ${endTime}`);
+        setTimeRange({ start: startTime, end: endTime });
+        console.log(`Generating ${type} report from ${startTime.toISOString()} to ${endTime.toISOString()}`);
     };
 
     return (
@@ -95,16 +122,16 @@ export default function StationDataPage() {
 
                 {/* Metadata Bar */}
                 <div className="px-6 py-1.5 text-xs text-white flex items-center gap-4 flex-shrink-0" style={{ backgroundColor: '#2d2d2d' }}>
-                    <span>Start Time: 1/13/2026 12:00:00 AM</span>
-                    <span>End Time: 1/14/2026 12:00:00 PM</span>
+                    <span>Start Time: {formatDateForDisplay(timeRange.start)}</span>
+                    <span>End Time: {formatDateForDisplay(timeRange.end)}</span>
                     <span>Data Logger: data_logger</span>
                     <span>Report Type: {getReportTypeName(activeReportType)}</span>
                 </div>
 
                 {/* Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-3 flex-1 overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] flex-1 overflow-hidden">
                     {/* Left: Data Table */}
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full bg-zinc-900" style={{ backgroundColor: '#1a1a1a' }}>
+                    <div className="bg-white  shadow-lg overflow-hidden flex flex-col h-full bg-zinc-900" style={{ backgroundColor: '#1a1a1a' }}>
                         {/* Tab Navigation */}
                         <div className="flex flex-shrink-0" style={{ backgroundColor: '#2d2d2d' }}>
                             {tabs.map((tab) => (
@@ -175,7 +202,7 @@ export default function StationDataPage() {
                     </div>
 
                     {/* Right: Report Cards */}
-                    <div className="flex flex-col gap-2 h-full bg-zinc-300">
+                    <div className="flex mr-1 flex-col h-full bg-zinc-300">
                         <div className="flex-1">
                             <ReportCard
                                 title="Discharge Reports"

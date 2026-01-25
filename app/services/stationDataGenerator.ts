@@ -82,9 +82,6 @@ export function getColumnsByType(type: ReportType, stationName: string): TableCo
                 { key: 'pressure', label: `${prefix}_Pressure`, align: 'center' },
                 { key: 'temperature', label: `${prefix}_Temperature`, align: 'center' },
                 { key: 'windSpeed', label: `${prefix}_WindSpeed`, align: 'center' },
-                { key: 'rainfallDay', label: `${prefix}_Rainfall_Day`, align: 'center' },
-                { key: 'rainfallHr', label: `${prefix}_Rainfall_Hr`, align: 'center' },
-                { key: 'solarRadiation', label: `${prefix}_Solar_Rad`, align: 'center' },
             ];
         case 'rain-gauge':
             return [
@@ -123,17 +120,67 @@ function getIntervalByTab(tab: TimeTab): number {
     }
 }
 
-// Generate data based on report type
+// Generate data based on report type with time filtering
 export function generateStationData(
     type: ReportType,
     stationId: string,
     tab: TimeTab,
-    startTime?: string,
-    endTime?: string
+    startTime?: Date,
+    endTime?: Date
 ): TableRow[] {
-    const rowCount = getRowCountByTab(tab);
-    const interval = getIntervalByTab(tab);
-    const baseDate = startTime ? new Date(startTime) : new Date('2026-01-13T00:00:00');
+    // Use provided times or defaults
+    const now = new Date();
+    const end = endTime || now;
+    const start = startTime || new Date(end.getTime() - getIntervalByTab(tab) * getRowCountByTab(tab));
+
+    // Calculate time range
+    const timeRange = end.getTime() - start.getTime();
+
+    // Determine interval based on tab or time range
+    let interval: number;
+    let rowCount: number;
+
+    switch (tab) {
+        case 'Minute':
+            interval = 60000; // 1 minute
+            rowCount = Math.min(Math.ceil(timeRange / interval), 1000);
+            break;
+        case 'Hour':
+            interval = 3600000; // 1 hour
+            rowCount = Math.min(Math.ceil(timeRange / interval), 168); // max 1 week in hours
+            break;
+        case 'Day':
+            interval = 86400000; // 1 day
+            rowCount = Math.min(Math.ceil(timeRange / interval), 7); // max 1 week in days
+            break;
+        case 'Week':
+            interval = 604800000; // 1 week
+            rowCount = Math.min(Math.ceil(timeRange / interval), 1);
+            break;
+        case 'Month':
+            interval = 2592000000; // ~30 days
+            rowCount = 1; // max 1 week won't have full months
+            break;
+        case 'Year':
+            interval = 31536000000; // 1 year
+            rowCount = 1;
+            break;
+        case 'All':
+        default:
+            // For 'All', use minute intervals if range is small, hour if larger
+            if (timeRange <= 3600000) {
+                interval = 60000; // 1 minute
+            } else if (timeRange <= 86400000) {
+                interval = 3600000; // 1 hour
+            } else {
+                interval = 86400000; // 1 day
+            }
+            rowCount = Math.min(Math.ceil(timeRange / interval), 500);
+            break;
+    }
+
+    // Ensure at least 1 row
+    rowCount = Math.max(rowCount, 1);
 
     // Use station ID for consistent random seed
     const seed = stationId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
@@ -141,7 +188,11 @@ export function generateStationData(
     const data: TableRow[] = [];
 
     for (let i = 0; i < rowCount; i++) {
-        const timestamp = new Date(baseDate.getTime() + i * interval);
+        const timestamp = new Date(start.getTime() + i * interval);
+
+        // Stop if we exceed end time
+        if (timestamp > end) break;
+
         const randomFactor = (seed + i) % 100 / 100;
 
         const baseRow: TableRow = {
