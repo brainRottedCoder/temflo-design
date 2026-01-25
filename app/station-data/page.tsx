@@ -51,6 +51,9 @@ export default function StationDataPage() {
     const [tableData, setTableData] = useState<TableRow[]>([]);
     const [columns, setColumns] = useState<TableColumn[]>([]);
 
+    // Loading state
+    const [isLoading, setIsLoading] = useState(false);
+
     // Get stations for each report type
     const dischargeStations = getStationsByType('discharge');
     const awsStations = getStationsByType('aws');
@@ -65,23 +68,34 @@ export default function StationDataPage() {
 
     // Update data when selections change
     useEffect(() => {
-        const stationId = selectedStations[activeReportType];
-        const stations = getStationsByType(activeReportType);
-        const station = stations.find(s => s.id === stationId);
+        const loadData = async () => {
+            setIsLoading(true);
 
-        if (station) {
-            const newColumns = getColumnsByType(activeReportType, station.title);
-            const newData = generateStationData(
-                activeReportType,
-                stationId,
-                activeTab,
-                timeRange.start,
-                timeRange.end
-            );
-            setColumns(newColumns);
-            setTableData(newData);
-            setSelectedRow(0);
-        }
+            // Simulate API delay for realistic loading experience
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const stationId = selectedStations[activeReportType];
+            const stations = getStationsByType(activeReportType);
+            const station = stations.find(s => s.id === stationId);
+
+            if (station) {
+                const newColumns = getColumnsByType(activeReportType, station.title);
+                const newData = generateStationData(
+                    activeReportType,
+                    stationId,
+                    activeTab,
+                    timeRange.start,
+                    timeRange.end
+                );
+                setColumns(newColumns);
+                setTableData(newData);
+                setSelectedRow(0);
+            }
+
+            setIsLoading(false);
+        };
+
+        loadData();
     }, [activeReportType, selectedStations, activeTab, timeRange]);
 
     // Handle station change
@@ -149,7 +163,16 @@ export default function StationDataPage() {
                         </div>
 
                         {/* Table - Scrollable */}
-                        <div className="flex-1 overflow-auto" style={{ backgroundColor: '#1a1a1a' }}>
+                        <div className="flex-1 overflow-auto relative" style={{ backgroundColor: '#1a1a1a' }}>
+                            {/* Loading Overlay */}
+                            {isLoading && (
+                                <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-20">
+                                    <div className="flex flex-col items-center gap-3">
+                                        <div className="w-10 h-10 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                        <span className="text-white text-sm font-medium">Loading data...</span>
+                                    </div>
+                                </div>
+                            )}
                             <table className="w-full text-xs border-collapse">
                                 <thead style={{ backgroundColor: '#2d2d2d', position: 'sticky', top: 0, zIndex: 10 }}>
                                     <tr>
@@ -240,29 +263,77 @@ export default function StationDataPage() {
             {/* Bottom Navigation */}
             <nav className="px-2 py-1 flex items-center justify-between flex-shrink-0 " style={{ backgroundColor: '#405aaeff' }}>
                 <div className="flex">
-                    {['Overview', 'Discharge Station', 'Weather Station', 'Rain Gauge', 'OMNI Siren', 'BY-D Siren', 'Trends', 'Alarms', 'Report'].map((item) => (
+                    {[
+                        { label: 'Overview', path: '/overview' },
+                        { label: 'Discharge Station', path: '/overview' },
+                        { label: 'Weather Station', path: '/overview' },
+                        { label: 'Rain Gauge', path: '/overview' },
+                        { label: 'OMNI Siren', path: '/station-data' },
+                        { label: 'BY-D Siren', path: '/station-data' },
+                        { label: 'Trends', path: '/station-data' },
+                        { label: 'Alarms', path: '/station-data' },
+                        { label: 'Report', path: '/station-data' }
+                    ].map((item) => (
                         <button
-                            key={item}
-                            className="px-5 py-3 border-2 border-zinc-600 text-md font-medium transition-colors"
+                            key={item.label}
+                            onClick={() => window.location.href = item.path}
+                            className="px-5 py-3 border-2 border-zinc-600 text-md font-medium transition-colors hover:bg-zinc-600"
                             style={{
                                 backgroundColor: '#4a4a4a',
                                 color: 'white',
                                 borderColor: '#666'
                             }}
                         >
-                            {item}
+                            {item.label}
                         </button>
                     ))}
                 </div>
-                <div className="flex items-center">
-                    <span className="text-white text-lg font-medium border-2 border-white/40 px-5 py-2.5" style={{ backgroundColor: '#252424ff' }}>Tuesday, January 13, 2026</span>
-                    <span className="flex ml-0.5 px-1 py-1.5 text-lg font-mono font-bold border-1 border-white/40 rounded-md bg-black">
-                        <span className="border-1 px-4 py-1 rounded-md border-white/40 bg-white/80" style={{ borderColor: '#666' }}>
-                            14:04:15
-                        </span>
-                    </span>
-                </div>
+                <BottomClock />
             </nav>
+        </div>
+    );
+}
+
+// Live clock component
+function BottomClock() {
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    const formatDate = (date: Date) => {
+        return date.toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+        });
+    };
+
+    const formatTime = (date: Date) => {
+        return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+    };
+
+    return (
+        <div className="flex items-center">
+            <span className="text-white text-lg font-medium border-2 border-white/40 px-5 py-2.5" style={{ backgroundColor: '#252424ff' }}>
+                {formatDate(currentTime)}
+            </span>
+            <span className="flex ml-0.5 px-1 py-1.5 text-lg font-mono font-bold border-1 border-white/40 rounded-md bg-black">
+                <span className="border-1 px-4 py-1 rounded-md border-white/40 bg-white/80" style={{ borderColor: '#666' }}>
+                    {formatTime(currentTime)}
+                </span>
+            </span>
         </div>
     );
 }
